@@ -16,6 +16,20 @@ namespace ReleaseManager.Services
                                    CurrentBuild = "R2.1",
                                    PreviousBuild = "R1.6",
                                    LastReleaseDate = "10 October 2012"
+                               },
+                            new Environment
+                               {
+                                   Name = "Test",
+                                   CurrentBuild = "R2.1",
+                                   PreviousBuild = "R1.6",
+                                   LastReleaseDate = "21 July 2012"
+                               },
+                               new Environment
+                               {
+                                   Name = "UAT",
+                                   CurrentBuild = "R2.1",
+                                   PreviousBuild = "R1.6",
+                                   LastReleaseDate = "5 June 2012"
                                }
                        };
         }

@@ -16,10 +16,10 @@
         foreach (var environment in Model)
         {
             <tr>
-                <td>@environment.Name</td>
-                <td>@environment.CurrentBuild</td>
-                <td>@environment.PreviousBuild</td>
-                <td>@environment.LastReleaseDate</td>
+                <td class="environment">@environment.Name</td>
+                <td class="environment">@environment.CurrentBuild</td>
+                <td class="environment">@environment.PreviousBuild</td>
+                <td class="environment">@environment.LastReleaseDate</td>
             </tr>
         }
     }

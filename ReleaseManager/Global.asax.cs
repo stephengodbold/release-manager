@@ -40,9 +40,9 @@ namespace ReleaseManager
                             .LifestyleTransient());
 
             container.Register(Classes.FromThisAssembly()
-                            .BasedOn<IEnvironmentService>()
-                            .LifestylePerWebRequest()
-                            .WithServiceAllInterfaces());
+                                   .BasedOn<IEnvironmentService>()
+                                   .LifestylePerWebRequest()
+                                   .WithServiceAllInterfaces());
         }
 
         public override void Dispose()

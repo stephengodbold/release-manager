@@ -9,6 +9,19 @@ header, footer, nav, section {
     display: block;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding-right: 40px;
+    border: #CCC 1px solid;
+}
+
+td.environment {
+    border-bottom: #CCC 1px solid;
+    height: 50px;
+}
 
 /* Styles for basic forms
 -----------------------------------------------------------*/
