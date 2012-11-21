@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ReleaseManager.Models.Environment>
+
+@{
+    ViewBag.Title = "Release Manager - Environments";
+}
+
+<h2>Environments</h2>
+<table>
+    <tr>
+        <th>Environment</th>
+        <th>Build</th>
+        <th>Last Build</th>
+        <th>Release Date</th>
+    </tr>
+    @{
+        foreach (var environment in Model)
+        {
+            <tr>
+                <td>@environment.Name</td>
+                <td>@environment.CurrentBuild</td>
+                <td>@environment.PreviousBuild</td>
+                <td>@environment.LastReleaseDate</td>
+            </tr>
+        }
+    }
+</table>
