@@ -9,6 +9,9 @@ param(
     $rootPath
 )
 
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
 function Get-PreviousVersion {
     param(
         [Parameter(Mandatory=$true)]
@@ -29,9 +32,7 @@ if (-not(Test-Path $versionTextPath)) {
     New-Item $versionTextPath -ItemType File
 }
 
-#CurrentVersion, PreviousVersion, Timestamp
 $previousVersion = Get-PreviousVersion $versionTextPath
-
 $version = New-Object PSObject -Property `
             @{ 
                 CurrentVersion = $versionText;
