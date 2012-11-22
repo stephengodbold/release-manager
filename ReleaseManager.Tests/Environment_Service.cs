@@ -29,27 +29,6 @@ namespace ReleaseManager.Tests
             }
 
             [TestMethod]
-            public void Should_Return_Only_Valid_Uris_From_Configuration()
-            {
-                var configService = Substitute.For<IConfigurationService>();
-                var query = Substitute.For<IEnvironmentQuery>();
-
-                configService.GetEnvironments()
-                    .Returns(info => new Dictionary<string, string>
-                        {
-                            {"Environment.Demo", "xyz"},
-                            {"Environment.Test", "http://test.com"}
-                        });
-
-                query.GetEnvironmentDetails(Arg.Any<Uri>()).ReturnsForAnyArgs(new Models.Environment());
-
-                var environmentService = new EnvironmentService(query, configService);
-                var environments = environmentService.GetEnvironments();
-
-                environments.Count().ShouldBe(1);
-            }
-
-            [TestMethod]
             public void Should_Return_All_Configured_Environments()
             {
                 var configService = Substitute.For<IConfigurationService>();

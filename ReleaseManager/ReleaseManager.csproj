@@ -92,6 +92,7 @@
     <Compile Include="Models\Environment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\EnvironmentQuery.cs" />
+    <Compile Include="Queries\IConfigurationQuery.cs" />
     <Compile Include="Queries\IEnvironmentQuery.cs" />
     <Compile Include="Services\ConfigurationService.cs" />
     <Compile Include="Services\EnvironmentService.cs" />

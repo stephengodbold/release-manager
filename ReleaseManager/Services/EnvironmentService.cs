@@ -21,13 +21,9 @@ namespace ReleaseManager.Services
         public IEnumerable<Environment> GetEnvironments()
         {
             var environments = configurationService.GetEnvironments();
-            if (environments == null) return new Environment[] {};
-
-            var config = from environment in environments
-                         where Uri.IsWellFormedUriString(environment.Value, UriKind.Absolute)
-                         select environmentQuery.GetEnvironmentDetails(new Uri(environment.Value));
-
-            return config;
+            return environments == null ? 
+                new Environment[] {} : 
+                environments.Select(env => environmentQuery.GetEnvironmentDetails(new Uri(env.Value)));
         }
     }
 }
