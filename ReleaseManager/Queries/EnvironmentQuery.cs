@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Linq;
 using Microsoft.VisualBasic.FileIO;
 using Environment = ReleaseManager.Models.Environment;
 
@@ -13,23 +14,27 @@ namespace ReleaseManager.Queries
             var client = new WebClient();
 
             var contentStream = client.OpenRead(requestPath);
-            var parser = new TextFieldParser(contentStream);
-
-            parser.TextFieldType = FieldType.Delimited;
-            parser.SetDelimiters(",");
-
-            var environment = new Environment { Name= rootUrl.Host };
-
-            while(!parser.EndOfData)
+            using (var parser = new TextFieldParser(contentStream))
             {
-                var fields = parser.ReadLine();
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(",");
+                parser.CommentTokens = new[] {"#"};
 
-                environment.LastReleaseDate = fields[0].ToString();
-                environment.CurrentBuild = fields[1].ToString();
-                environment.PreviousBuild = fields[2].ToString();
+                var environment = new Environment {Name = rootUrl.Host};
+
+                while (!parser.EndOfData)
+                {
+                    var fields = parser.ReadFields();
+
+                    if (fields.Count() != 3) continue;
+
+                    environment.LastReleaseDate = fields[0];
+                    environment.CurrentBuild = fields[1];
+                    environment.PreviousBuild = fields[2];
+                }
+
+                return environment;
             }
-
-            return environment;
         }
     }
 }
