@@ -23,7 +23,7 @@ function Get-PreviousVersion {
         return
     }
     $versionFileContent = Import-Csv $versionTextPath
-    return $versionFileContent.CurrentRelease
+    return $versionFileContent.CurrentVersion
 }
 
 $versionTextPath = Join-Path $rootPath 'version.csv'
@@ -37,7 +37,7 @@ $version = New-Object PSObject -Property `
             @{ 
                 CurrentVersion = $versionText;
                 PreviousVersion = $previousVersion;
-                ReleaseDate = Get-Date
+                ReleaseDate = Get-Date -Format 'F'
            }
 
 Export-Csv -Path $versionTextPath -InputObject $version
