@@ -6,21 +6,36 @@
 
 <h2>Environments</h2>
 <table>
-    <tr>
-        <th>Environment</th>
-        <th>Build</th>
-        <th>Last Build</th>
-        <th>Release Date</th>
-    </tr>
-    @{
-        foreach (var environment in Model)
-        {
+    <thead>
+        <tr>
+
+            <th>Environment</th>
+            <th>Build</th>
+            <th>Last Build</th>
+            <th>Release Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var environment in Model)
+            {
             <tr>
                 <td class="environment">@environment.Name</td>
                 <td class="environment">@environment.CurrentBuild</td>
-                <td class="environment">@environment.PreviousBuild</td>
+                <td class="environment">
+                    @(string.IsNullOrWhiteSpace(environment.PreviousBuild) ? "None" : environment.PreviousBuild)
+                </td>
                 <td class="environment">@environment.LastReleaseDate</td>
             </tr>
+            }
         }
-    }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
 </table>

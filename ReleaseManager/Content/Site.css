@@ -3,6 +3,7 @@
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     color: #232323;
     background-color: #fff;
+    margin: 25px 0px 0px 50px;
 }
 
 header, footer, nav, section {
@@ -11,17 +12,24 @@ header, footer, nav, section {
 
 table {
     border-collapse: collapse;
+    margin-top: 25px;
 }
 
-th, td {
+thead tr {
+    border-bottom: 2px black solid;
+    text-align: left;
+}
+
+td, th {
     padding-right: 40px;
-    border: #CCC 1px solid;
+    min-width: 150px;
 }
 
 td.environment {
     border-bottom: #CCC 1px solid;
     height: 50px;
 }
+
 
 /* Styles for basic forms
 -----------------------------------------------------------*/
