@@ -43,6 +43,7 @@
       <HintPath>..\packages\Castle.Windsor.3.1.0\lib\net40\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Core" />
@@ -91,6 +92,7 @@
     </Compile>
     <Compile Include="Models\Environment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\EnvironmentConfigurationQuery.cs" />
     <Compile Include="Queries\EnvironmentQuery.cs" />
     <Compile Include="Queries\IConfigurationQuery.cs" />
     <Compile Include="Queries\IEnvironmentQuery.cs" />
