@@ -1,37 +1,29 @@
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using ReleaseManager.Models;
+using System.Linq;
+using ReleaseManager.Queries;
+using Environment = ReleaseManager.Models.Environment;
 
 namespace ReleaseManager.Services
 {
     public class EnvironmentService : IEnvironmentService
     {
+        private readonly IEnvironmentQuery environmentQuery;
+        private readonly IConfigurationService configurationService;
+
+        public EnvironmentService(IEnvironmentQuery query, 
+            IConfigurationService configuration)
+        {
+            environmentQuery = query;
+            configurationService = configuration;
+        }
+
         public IEnumerable<Environment> GetEnvironments()
         {
-            return new Collection<Environment>
-                       {
-                           new Environment
-                               {
-                                   Name = "Demo",
-                                   CurrentBuild = "R2.1",
-                                   PreviousBuild = "R1.6",
-                                   LastReleaseDate = "10 October 2012"
-                               },
-                            new Environment
-                               {
-                                   Name = "Test",
-                                   CurrentBuild = "R2.1",
-                                   PreviousBuild = "R1.6",
-                                   LastReleaseDate = "21 July 2012"
-                               },
-                               new Environment
-                               {
-                                   Name = "UAT",
-                                   CurrentBuild = "R2.1",
-                                   PreviousBuild = "R1.6",
-                                   LastReleaseDate = "5 June 2012"
-                               }
-                       };
+            var environments = configurationService.GetEnvironments();
+
+            return environments.Select(environment => new Uri(environment.Value))
+                .Select(queryUrl => environmentQuery.GetEnvironmentDetails(queryUrl));
         }
     }
 }

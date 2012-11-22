@@ -7,6 +7,7 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using ReleaseManager.Common;
+using ReleaseManager.Queries;
 using ReleaseManager.Services;
 
 namespace ReleaseManager
@@ -43,8 +44,18 @@ namespace ReleaseManager
                                    .BasedOn<IEnvironmentService>()
                                    .LifestylePerWebRequest()
                                    .WithServiceAllInterfaces());
-        }
 
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IConfigurationService>()
+                                   .LifestylePerWebRequest()
+                                   .WithServiceAllInterfaces());
+
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IEnvironmentQuery>()
+                                   .LifestylePerWebRequest()
+                                   .WithServiceAllInterfaces());
+        }
+        
         public override void Dispose()
         {
             container.Dispose();
