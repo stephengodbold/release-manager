@@ -54,6 +54,11 @@ namespace ReleaseManager
                                    .BasedOn<IEnvironmentQuery>()
                                    .LifestylePerWebRequest()
                                    .WithServiceAllInterfaces());
+
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IConfigurationQuery>()
+                                   .LifestylePerWebRequest()
+                                   .WithServiceAllInterfaces());
         }
         
         public override void Dispose()
