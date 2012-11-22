@@ -9,7 +9,7 @@ namespace ReleaseManager.Queries
         {
             return new Environment
                        {
-                           Name = "Demo",
+                           Name = rootUrl.Host,
                            CurrentBuild = "R1.0",
                            PreviousBuild = "R0.9",
                            LastReleaseDate = "10th October 2012"
