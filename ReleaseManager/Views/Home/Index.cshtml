@@ -13,6 +13,7 @@
             <th>Build</th>
             <th>Last Build</th>
             <th>Release Date</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -26,12 +27,21 @@
                     @(string.IsNullOrWhiteSpace(environment.PreviousBuild) ? "None" : environment.PreviousBuild)
                 </td>
                 <td class="environment">@environment.LastReleaseDate</td>
+                <td class="environment">@Html.ActionLink("View Associated Work",
+                                                            "Index",
+                                                            "Release",
+                                                            new{ 
+                                                                CurrentBuild = environment.CurrentBuild, 
+                                                                PreviousBuild = environment.PreviousBuild 
+                                                            }, 
+                                                            null)</td>
             </tr>
             }
         }
     </tbody>
     <tfoot>
         <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
