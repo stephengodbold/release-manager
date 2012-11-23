@@ -42,7 +42,7 @@ namespace ReleaseManager.Tests
                             {"Environment.Production", "http://test.com"},
                         });
 
-                query.GetEnvironmentDetails(Arg.Any<Uri>()).ReturnsForAnyArgs(new Models.Environment());
+                query.Execute(Arg.Any<Uri>()).ReturnsForAnyArgs(new Models.Environment());
 
                 var environmentService = new EnvironmentService(query, configService);
                 var environments = environmentService.GetEnvironments();

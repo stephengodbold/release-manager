@@ -8,20 +8,28 @@ namespace ReleaseManager.Services
 {
     public class ConfigurationService : IConfigurationService
     {
-        private readonly IConfigurationQuery query;
+        private readonly IEnvironmentConfigurationQuery environmentQuery;
+        private readonly IServerConfigurationQuery serverQuery;
 
-        public ConfigurationService(IConfigurationQuery query)
+        public ConfigurationService(IEnvironmentConfigurationQuery environmentQuery,
+            IServerConfigurationQuery serverQuery)
         {
-            this.query = query;
+            this.environmentQuery = environmentQuery;
+            this.serverQuery = serverQuery;
         }
 
         public IDictionary<string, string> GetEnvironments()
         {
-            var configurationValues = query.Execute();
+            var configurationValues = environmentQuery.Execute();
 
             return configurationValues
                 .Where(config => Uri.IsWellFormedUriString(config.Value, UriKind.Absolute))
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
+
+        public IDictionary<string, string> GetServers()
+        {
+            return serverQuery.Execute();
         }
     }
 }

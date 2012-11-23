@@ -40,6 +40,12 @@ namespace ReleaseManager
                             .BasedOn<IController>()
                             .LifestyleTransient());
 
+            RegisterServices();
+            RegisterQueries();
+        }
+
+        private void RegisterServices()
+        {
             container.Register(Classes.FromThisAssembly()
                                    .BasedOn<IEnvironmentService>()
                                    .LifestylePerWebRequest()
@@ -51,16 +57,39 @@ namespace ReleaseManager
                                    .WithServiceAllInterfaces());
 
             container.Register(Classes.FromThisAssembly()
-                                   .BasedOn<IEnvironmentQuery>()
-                                   .LifestylePerWebRequest()
-                                   .WithServiceAllInterfaces());
-
-            container.Register(Classes.FromThisAssembly()
-                                   .BasedOn<IConfigurationQuery>()
+                                   .BasedOn<IWorkItemService>()
                                    .LifestylePerWebRequest()
                                    .WithServiceAllInterfaces());
         }
-        
+
+        private void RegisterQueries()
+        {
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IEnvironmentQuery>()
+                                   .LifestyleTransient()
+                                   .WithServiceAllInterfaces());
+
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IEnvironmentConfigurationQuery>()
+                                   .LifestyleTransient()
+                                   .WithServiceAllInterfaces());
+
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IServerConfigurationQuery>()
+                                   .LifestyleTransient()
+                                   .WithServiceAllInterfaces());
+
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IBuildQuery>()
+                                   .LifestyleTransient()
+                                   .WithServiceAllInterfaces());
+
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IBuildWorkItemQuery>()
+                                   .LifestyleTransient()
+                                   .WithServiceAllInterfaces());
+        }
+
         public override void Dispose()
         {
             container.Dispose();

@@ -23,7 +23,7 @@ namespace ReleaseManager.Services
             var environments = configurationService.GetEnvironments();
             return environments == null ? 
                 new Environment[] {} : 
-                environments.Select(env => environmentQuery.GetEnvironmentDetails(new Uri(env.Value)));
+                environments.Select(env => environmentQuery.Execute(new Uri(env.Value)));
         }
     }
 }

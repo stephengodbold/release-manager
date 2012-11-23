@@ -8,9 +8,10 @@ namespace ReleaseManager.Queries
 {
     public class EnvironmentQuery : IEnvironmentQuery
     {
-        public Environment GetEnvironmentDetails(Uri rootUrl)
+        
+        public Environment Execute(Uri rootUri)
         {
-            var requestPath = new Uri(rootUrl, "version.csv");
+            var requestPath = new Uri(rootUri, "version.csv");
             var client = new WebClient();
 
             var contentStream = client.OpenRead(requestPath);
@@ -20,7 +21,7 @@ namespace ReleaseManager.Queries
                 parser.SetDelimiters(",");
                 parser.CommentTokens = new[] {"#"};
 
-                var environment = new Environment {Name = rootUrl.Host};
+                var environment = new Environment { Name = rootUri.Host };
 
                 while (!parser.EndOfData)
                 {
@@ -36,5 +37,10 @@ namespace ReleaseManager.Queries
                 return environment;
             }
         }
+    }
+    
+    public interface IEnvironmentQuery
+    {
+        Environment Execute(Uri rootUri);
     }
 }

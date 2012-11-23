@@ -20,19 +20,20 @@ namespace ReleaseManager.Tests
             [TestMethod]
             public void Should_Return_Only_Valid_Uris_From_Configuration()
             {
-                var configQuery = Substitute.For<IConfigurationQuery>();
+                var envConfigQuery = Substitute.For<IEnvironmentConfigurationQuery>();
+                var serverConfigQuery = Substitute.For<IServerConfigurationQuery>();
                 var query = Substitute.For<IEnvironmentQuery>();
 
-                configQuery.Execute()
+                envConfigQuery.Execute()
                     .Returns(info => new Dictionary<string, string>
                         {
                             {"Environment.Demo", "xyz"},
                             {"Environment.Test", "http://test.com"}
                         });
 
-                query.GetEnvironmentDetails(Arg.Any<Uri>()).ReturnsForAnyArgs(new Models.Environment());
+                query.Execute(Arg.Any<Uri>()).ReturnsForAnyArgs(new Models.Environment());
 
-                var configService = new ConfigurationService(configQuery);
+                var configService = new ConfigurationService(envConfigQuery, serverConfigQuery);
                 var environments = configService.GetEnvironments();
 
                 environments.Count().ShouldBe(1);
