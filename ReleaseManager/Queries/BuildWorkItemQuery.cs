@@ -14,20 +14,27 @@ namespace ReleaseManager.Queries
 {
     public class BuildWorkItemQuery : IBuildWorkItemQuery
     {
+        private readonly IWorkItemCategoryQuery workItemCategoryQuery;
+
+        public BuildWorkItemQuery(IWorkItemCategoryQuery workItemCategoryQuery)
+        {
+            this.workItemCategoryQuery = workItemCategoryQuery;
+        }
+
         public IEnumerable<WorkItem> Execute(BuildDetail earliestBuild, BuildDetail latestBuild, Uri serverUri, string projectName)
         {
             using (var collection = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(serverUri))
             {
-                return earliestBuild.BranchRoot.Equals(latestBuild.BranchRoot, StringComparison.InvariantCultureIgnoreCase) ? 
-                    GetWorkItemsFromOneBranch(earliestBuild, latestBuild, projectName, collection) : 
+                return earliestBuild.BranchRoot.Equals(latestBuild.BranchRoot, StringComparison.InvariantCultureIgnoreCase) ?
+                    GetWorkItemsFromOneBranch(earliestBuild, latestBuild, projectName, collection) :
                     GetWorkItemsAcrossBranches(earliestBuild, latestBuild, projectName, collection);
             }
         }
 
-        private static IEnumerable<WorkItem> GetWorkItemsAcrossBranches(
-            BuildDetail earliestBuild, 
-            BuildDetail latestBuild, 
-            string projectName, 
+        private IEnumerable<WorkItem> GetWorkItemsAcrossBranches(
+            BuildDetail earliestBuild,
+            BuildDetail latestBuild,
+            string projectName,
             TfsConnection collection)
         {
             var buildServer = collection.GetService<IBuildServer>();
@@ -47,13 +54,13 @@ namespace ReleaseManager.Queries
             searchSpec.MaxFinishTime = latestBuild.Date;
             searchSpec.QueryDeletedOption = QueryDeletedOption.IncludeDeleted;
             var secondResultSet = buildServer.QueryBuilds(searchSpec);
-            
+
             var builds = firstResultSet.Builds.Union(secondResultSet.Builds);
 
-            return GetWorkItemsForBuilds(builds, collection);
+            return GetWorkItemsForBuilds(builds, collection, projectName);
         }
 
-        private static IEnumerable<WorkItem> GetWorkItemsFromOneBranch(
+        private IEnumerable<WorkItem> GetWorkItemsFromOneBranch(
                         BuildDetail earliestBuild,
                         BuildDetail latestBuild,
                         string projectName,
@@ -67,32 +74,41 @@ namespace ReleaseManager.Queries
             searchSpec.QueryDeletedOption = QueryDeletedOption.IncludeDeleted;
 
             var results = buildServer.QueryBuilds(searchSpec);
-            
-
-            return GetWorkItemsForBuilds(results.Builds, collection);
+            return GetWorkItemsForBuilds(results.Builds, collection, projectName);
         }
 
-        private static IEnumerable<WorkItem> GetWorkItemsForBuilds(IEnumerable<IBuildDetail> results, TfsConnection collection)
+        private IEnumerable<WorkItem> GetWorkItemsForBuilds(
+            IEnumerable<IBuildDetail> results,
+            TfsConnection collection,
+            string projectName)
         {
             var workItemService = collection.GetService<WorkItemStore>();
+            var configuredCategory = workItemCategoryQuery.Execute();
+
+            var category = workItemService.Projects[projectName].Categories
+                .FirstOrDefault(c => c.ReferenceName.Equals(configuredCategory, 
+                                        StringComparison.InvariantCultureIgnoreCase));
+
+            if (category == null)
+            {
+                throw new ArgumentOutOfRangeException("WorkItem.Category", 
+                    configuredCategory,
+                    "The configured category name was not found");
+            }
 
             foreach (var summaries in results.Select(InformationNodeConverters.GetAssociatedWorkItems))
             {
                 {
-                    return summaries.Select(
-                        summary =>
-                            {
-                                var wi = workItemService.GetWorkItem(summary.WorkItemId);
-                                return new WorkItem
-                                           {
-                                               Id = wi.Id.ToString(CultureInfo.InvariantCulture),
-                                               Description = wi.Title,
-                                               Release = wi.Fields.Contains("StudyGlobal.TargetRelease") ? 
-                                                            wi.Fields["StudyGlobal.TargetRelease"].Value.ToString() :
-                                                            string.Empty,
-                                               State = wi.State
-                                           };
-                            }).ToArray();
+                    return summaries.Where(summary => {
+                        var wi = workItemService.GetWorkItem(summary.WorkItemId);
+                        return category.Contains(wi.Type);
+                    })
+                    .Select(wi => new WorkItem
+                        {
+                            Id = wi.Id.ToString(CultureInfo.InvariantCulture),
+                            Description = wi.Title,
+                            State = wi.Status
+                        }).ToArray();
                 }
             }
 
