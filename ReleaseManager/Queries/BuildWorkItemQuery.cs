@@ -100,10 +100,9 @@ namespace ReleaseManager.Queries
             {
                 {
                     return summaries.Where(summary => {
-                        var wi = workItemService.GetWorkItem(summary.WorkItemId);
-                        return category.Contains(wi.Type);
-                    })
-                    .Select(wi => new WorkItem
+                            var wi = workItemService.GetWorkItem(summary.WorkItemId);
+                            return category.Contains(wi.Type);
+                        }).Select(wi => new WorkItem
                         {
                             Id = wi.Id.ToString(CultureInfo.InvariantCulture),
                             Description = wi.Title,
