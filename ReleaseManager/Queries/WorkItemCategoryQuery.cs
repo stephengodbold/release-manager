@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Configuration;
 
 namespace ReleaseManager.Queries
 {
@@ -9,7 +6,10 @@ namespace ReleaseManager.Queries
     {
         public string Execute()
         {
-            return "Microsoft.RequirementCategory";
+            var configuration = new AppSettingsReader();
+            var value = configuration.GetValue("WorkItem.Category", typeof(string));
+
+            return value == null ? string.Empty : value.ToString();
         }
     }
 
