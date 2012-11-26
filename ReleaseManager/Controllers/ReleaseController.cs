@@ -9,10 +9,12 @@ namespace ReleaseManager.Controllers
     public class ReleaseController : Controller
     {
         private readonly IWorkItemService workItemService;
+        private readonly IBuildService buildService;
 
-        public ReleaseController(IWorkItemService workItemService)
+        public ReleaseController(IWorkItemService workItemService, IBuildService buildService)
         {
             this.workItemService = workItemService;
+            this.buildService = buildService;
         }
 
         public ActionResult Index(string currentRelease, string previousRelease)
@@ -32,12 +34,7 @@ namespace ReleaseManager.Controllers
         {
             return new JsonResult
                         {
-                            Data = new Collection<string>
-                                       {
-                                           "Continuous_20121126.1",
-                                           "Continuous_20121126.2",
-                                           "Continuous_20121126.3",
-                                       },
+                            Data = buildService.GetBuilds(date),
                         };
         }
 

@@ -60,6 +60,11 @@ namespace ReleaseManager
                                    .BasedOn<IWorkItemService>()
                                    .LifestylePerWebRequest()
                                    .WithServiceAllInterfaces());
+
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IBuildService>()
+                                   .LifestylePerWebRequest()
+                                   .WithServiceAllInterfaces());
         }
 
         private void RegisterQueries()
