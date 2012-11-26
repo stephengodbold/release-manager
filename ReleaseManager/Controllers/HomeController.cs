@@ -14,8 +14,7 @@ namespace ReleaseManager.Controllers
 
         public ActionResult Index()
         {
-            var environments = environmentService.GetEnvironments();
-            return View(environments);
+            return View(environmentService.GetEnvironments());
         }
     }
 }

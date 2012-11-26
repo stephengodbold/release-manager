@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Web.Mvc;
 using ReleaseManager.Models;
 using ReleaseManager.Services;
 
@@ -23,6 +25,19 @@ namespace ReleaseManager.Controllers
                                 Items = workItemService.GetWorkItems(previousRelease, currentRelease),
                                 States = new[] { "Active", "Resolved", "Testing"}
                             });
+        }
+
+        public JsonResult Builds(DateTime date)
+        {
+            return new JsonResult()
+                       {
+                           Data = new Collection<string>
+                                      {
+                                          "Continuous_20121126.1",
+                                          "Continuous_20121126.2",
+                                          "Continuous_20121126.3",
+                                      }
+                       };
         }
 
     }
