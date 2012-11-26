@@ -17,6 +17,7 @@ namespace ReleaseManager.Controllers
             this.buildService = buildService;
         }
 
+
         public ActionResult Index(string currentRelease, string previousRelease)
         {
             return View(new ReleaseNotes
@@ -25,7 +26,7 @@ namespace ReleaseManager.Controllers
                                 CurrentRelease = "Phase 2_20121123.6",
                                 PreviousRelease = "Phase 2_20121123.2",
                                 Items = workItemService.GetWorkItems(previousRelease, currentRelease),
-                                States = new[] { "Active", "Resolved", "Testing"}
+                                States = new[] { "Active", "Resolved", "Testing" }
                             });
         }
 
@@ -38,5 +39,13 @@ namespace ReleaseManager.Controllers
                         };
         }
 
+        [HttpPost]
+        public JsonResult WorkItems(string previousRelease, string currentRelease)
+        {
+            return new JsonResult
+            {
+                Data = workItemService.GetWorkItems(previousRelease, currentRelease),
+            };
+        }
     }
 }

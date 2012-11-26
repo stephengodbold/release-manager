@@ -30,13 +30,39 @@ function populateBuildList(results) {
         }));
     });
 
-    buildSelect.show('slow');
+    $('#buildSelectionDisplay').show('slow');
 }
 
 function buildListError() {
     $('#buildListError').show();
 }
 
+function getWorkItems() {
+    var currentBuild = $('#CurrentRelease').val();
+    var previousBuild = $('#buildSelector').val();
+
+    $.ajax(
+        {
+            type: 'POST',
+            url: 'Release/WorkItems/',
+            data: 'previousRelease=' + previousBuild +'&currentRelease=' + currentBuild,
+            success: function (result) { populateReleaseNotes(result); },
+            error: function () { releaseNotesError(); }
+        });
+}
+
+function populateReleaseNotes(results) {
+    var source = $("#workitem-template").html();
+    var template = handlebars.compile(source);
+    var content = template(results);
+
+    $('#workitemList').html(content);
+}
+
+function releaseNotesError() {
+    
+}
+
 $('#buildFilterDate').datepicker({ dateFormat: "yy-mm-dd" });
-$('#buildSelector').hide();
+$('#buildSelectionDisplay').hide();
 $('#buildListError').hide();
