@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ReleaseManager.Queries;
 
 namespace ReleaseManager.Services
@@ -21,7 +22,7 @@ namespace ReleaseManager.Services
             var serverConfig = serverConfigurationQuery.Execute();
             return buildsForDateQuery.Execute(buildDate, 
                 new Uri(serverConfig["TeamFoundation"]), 
-                serverConfig["ProjectName"]);
+                serverConfig["ProjectName"]).OrderBy(build => build);
         }
     }
 
