@@ -40,8 +40,11 @@ function buildListError() {
 }
 
 function getWorkItems() {
-    var currentBuild = $('#CurrentRelease').val();
     var previousBuild = $('#buildSelector').val();
+    var currentBuild = $('#CurrentRelease').val();
+
+    $('#previousReleaseName').html(previousBuild);
+    $('#currentReleaseName').html(currentBuild);
 
     $.ajax(
         {
@@ -58,8 +61,8 @@ function populateReleaseNotes(results) {
     var template = Handlebars.compile(source);
 
     $('#workitemList').html(template(results));
-    $('#buildSelection').hide('slow');
-    $('#buildDetails').show('slow');
+    $('#buildSelection').fadeOut('fast');
+    $('#buildDetails').fadeIn('slow');
 }
 
 function releaseNotesError() {
