@@ -17,4 +17,9 @@ namespace ReleaseManager.Services
                        };
         }
     }
+
+    public interface IBuildService
+    {
+        IEnumerable<string> GetBuilds(DateTime buildDate);
+    }
 }

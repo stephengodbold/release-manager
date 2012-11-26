@@ -134,11 +134,7 @@
     <Compile Include="Services\BuildService.cs" />
     <Compile Include="Services\ConfigurationService.cs" />
     <Compile Include="Services\EnvironmentService.cs" />
-    <Compile Include="Services\IBuildService.cs" />
-    <Compile Include="Services\IConfigurationService.cs" />
-    <Compile Include="Services\IEnvironmentService.cs" />
     <Compile Include="Common\WindsorControllerFactory.cs" />
-    <Compile Include="Services\IWorkItemService.cs" />
     <Compile Include="Services\WorkItemService.cs" />
   </ItemGroup>
   <ItemGroup>

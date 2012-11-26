@@ -36,4 +36,9 @@ namespace ReleaseManager.Services
             return workItems;
         }
     }
+
+    public interface IWorkItemService
+    {
+        IEnumerable<WorkItem> GetWorkItems(string earlierBuild, string laterBuild);
+    }
 }

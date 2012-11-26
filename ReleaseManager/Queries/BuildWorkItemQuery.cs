@@ -26,7 +26,7 @@ namespace ReleaseManager.Queries
             using (var collection = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(serverUri))
             {
                 return earliestBuild.BranchRoot.Equals(latestBuild.BranchRoot, StringComparison.InvariantCultureIgnoreCase) ?
-                    GetWorkItemsFromOneBranch(earliestBuild, latestBuild, projectName, collection) :
+                    GetWorkItemsFromOneBranch(earliestBuild, latestBuild, projectName, collection):
                     GetWorkItemsAcrossBranches(earliestBuild, latestBuild, projectName, collection);
             }
         }

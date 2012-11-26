@@ -26,4 +26,9 @@ namespace ReleaseManager.Services
                 environments.Select(env => environmentQuery.Execute(new Uri(env.Value)));
         }
     }
+
+    public interface IEnvironmentService
+    {
+        IEnumerable<Environment> GetEnvironments();
+    }
 }

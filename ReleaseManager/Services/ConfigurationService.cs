@@ -32,4 +32,11 @@ namespace ReleaseManager.Services
             return serverQuery.Execute();
         }
     }
+
+    public interface IConfigurationService
+    {
+        IDictionary<string, string> GetEnvironments();
+        IDictionary<string, string> GetServers();
+    }
+
 }
