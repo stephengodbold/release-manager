@@ -1,4 +1,5 @@
 ﻿body {
+    width: 1280px;
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     color: #232323;
@@ -39,10 +40,10 @@ ul {
 }
 
 .highlighted-section {
-    width: 400px;
-    height: 50px;
     background-color: pink;
     border: 2px red dotted;
+    padding: 5px;
+    margin-bottom: 10px;
 }
 
 .hidden {

@@ -27,17 +27,18 @@ namespace ReleaseManager.Controllers
                             });
         }
 
+        [HttpPost]
         public JsonResult Builds(DateTime date)
         {
-            return new JsonResult()
-                       {
-                           Data = new Collection<string>
-                                      {
-                                          "Continuous_20121126.1",
-                                          "Continuous_20121126.2",
-                                          "Continuous_20121126.3",
-                                      }
-                       };
+            return new JsonResult
+                        {
+                            Data = new Collection<string>
+                                       {
+                                           "Continuous_20121126.1",
+                                           "Continuous_20121126.2",
+                                           "Continuous_20121126.3",
+                                       },
+                        };
         }
 
     }
