@@ -57,6 +57,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Configuration_Service.cs" />
+    <Compile Include="DateTime_Extensions.cs" />
     <Compile Include="Environment_Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

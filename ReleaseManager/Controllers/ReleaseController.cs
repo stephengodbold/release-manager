@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Net.Mime;
+using System.Text;
 using System.Web.Mvc;
 using ReleaseManager.Models;
 using ReleaseManager.Services;
@@ -42,10 +44,10 @@ namespace ReleaseManager.Controllers
         [HttpPost]
         public JsonResult WorkItems(string previousRelease, string currentRelease)
         {
-            return new JsonResult
-            {
-                Data = workItemService.GetWorkItems(previousRelease, currentRelease),
-            };
+            return Json( new { workitem = workItemService.GetWorkItems(previousRelease, currentRelease)},
+                 "application/json",
+                 Encoding.UTF8
+            );
         }
     }
 }

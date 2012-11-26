@@ -53,10 +53,9 @@ function getWorkItems() {
 
 function populateReleaseNotes(results) {
     var source = $("#workitem-template").html();
-    var template = handlebars.compile(source);
-    var content = template(results);
+    var template = Handlebars.compile(source);
 
-    $('#workitemList').html(content);
+    $('#workitemList').html(template(results));
 }
 
 function releaseNotesError() {

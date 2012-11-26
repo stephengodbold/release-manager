@@ -95,7 +95,12 @@ namespace ReleaseManager
                                    .WithServiceAllInterfaces());
 
             container.Register(Classes.FromThisAssembly()
-                                   .BasedOn<IBuildWorkItemQuery>()
+                                    .BasedOn<IBuildWorkItemQuery>()
+                                    .LifestyleTransient()
+                                    .WithServiceAllInterfaces());
+
+            container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<IBuildsForDateQuery>()
                                    .LifestyleTransient()
                                    .WithServiceAllInterfaces());
         }

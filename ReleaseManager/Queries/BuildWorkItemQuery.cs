@@ -26,7 +26,7 @@ namespace ReleaseManager.Queries
             using (var collection = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(serverUri))
             {
                 return earliestBuild.BranchRoot.Equals(latestBuild.BranchRoot, StringComparison.InvariantCultureIgnoreCase) ?
-                    GetWorkItemsFromOneBranch(earliestBuild, latestBuild, projectName, collection):
+                    GetWorkItemsFromOneBranch(earliestBuild, latestBuild, projectName, collection) :
                     GetWorkItemsAcrossBranches(earliestBuild, latestBuild, projectName, collection);
             }
         }
@@ -86,32 +86,38 @@ namespace ReleaseManager.Queries
             var configuredCategory = workItemCategoryQuery.Execute();
 
             var category = workItemService.Projects[projectName].Categories
-                .FirstOrDefault(c => c.ReferenceName.Equals(configuredCategory, 
+                .FirstOrDefault(c => c.ReferenceName.Equals(configuredCategory,
                                         StringComparison.InvariantCultureIgnoreCase));
 
             if (category == null)
             {
-                throw new ArgumentOutOfRangeException("WorkItem.Category", 
+                throw new ArgumentOutOfRangeException("WorkItem.Category",
                     configuredCategory,
                     "The configured category name was not found");
             }
 
+            var allWorkItems = new Collection<WorkItem>();
+
             foreach (var summaries in results.Select(InformationNodeConverters.GetAssociatedWorkItems))
             {
+                var items = summaries.Where(summary =>
+                                    {
+                                        var wi = workItemService.GetWorkItem(summary.WorkItemId);
+                                        return category.Contains(wi.Type);
+                                    }).Select(wi => new WorkItem
+                                    {
+                                        Id = wi.WorkItemId.ToString(CultureInfo.InvariantCulture),
+                                        Description = wi.Title,
+                                        State = wi.Status
+                                    });
+
+                foreach(var item in items)
                 {
-                    return summaries.Where(summary => {
-                            var wi = workItemService.GetWorkItem(summary.WorkItemId);
-                            return category.Contains(wi.Type);
-                        }).Select(wi => new WorkItem
-                        {
-                            Id = wi.Id.ToString(CultureInfo.InvariantCulture),
-                            Description = wi.Title,
-                            State = wi.Status
-                        }).ToArray();
+                    allWorkItems.Add(item);
                 }
             }
 
-            return new Collection<WorkItem>();
+            return allWorkItems.ToArray();
         }
     }
 
