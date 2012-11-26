@@ -4,7 +4,7 @@
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     color: #232323;
     background-color: #fff;
-    margin: 25px 0px 0px 50px;
+    margin-left:  50px;
 }
 
 header, footer, nav, section {
@@ -39,9 +39,9 @@ ul {
     padding-right: 20px;
 }
 
-.highlighted-section {
-    background-color: pink;
-    border: 2px red dotted;
+.highlighted {
+    background-color: lightgoldenrodyellow;
+    border: 2px orange dotted;
     padding-left: 10px;
     padding-bottom: 10px;
     margin-bottom: 10px;
@@ -49,6 +49,22 @@ ul {
 
 .hidden {
     display: none;
+}
+
+.message-bar {
+    margin-top: -10px;
+    margin-bottom: 25px;
+    padding-left: 10px;
+}
+
+.error{
+    background-color: pink;
+    border: 2px red dotted;
+}
+
+.confirmation{
+    background-color: lightgreen;
+    border: 2px green dotted;
 }
 
 /* Styles for basic forms

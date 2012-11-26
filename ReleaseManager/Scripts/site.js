@@ -19,7 +19,6 @@ function getBuildsForDate() {
 }
 
 function populateBuildList(results) {
-
     var buildSelect = $('#buildSelector');
     buildSelect.find('option').remove();
 
@@ -34,7 +33,10 @@ function populateBuildList(results) {
 }
 
 function buildListError() {
-    $('#buildListError').show();
+    $('#messageBar')
+        .html("<p>An error has occured while loading the builds. Try again soon</p>")
+        .removeClass('hidden')
+        .addClass('error', 'slow', 'swing');
 }
 
 function getWorkItems() {
@@ -56,10 +58,15 @@ function populateReleaseNotes(results) {
     var template = Handlebars.compile(source);
 
     $('#workitemList').html(template(results));
+    $('#buildSelection').hide('slow');
+    $('#buildDetails').show('slow');
 }
 
 function releaseNotesError() {
-    
+    $('#messageBar')
+        .html("<p>An error has occured while loading the work items. Try again soon</p>")
+        .addClass('error')
+        .slideDown('slow', 'swing');
 }
 
 $('#buildFilterDate').datepicker({ dateFormat: "yy-mm-dd" });
