@@ -68,6 +68,7 @@ function populateReleaseNotes(results) {
     $('#workitemList').html(template(results));
     $('#buildSelection').fadeOut('fast');
     $('#buildDetails').fadeIn('slow');
+    $('#releaseNotes').fadeIn('slow');
 }
 
 function releaseNotesError() {

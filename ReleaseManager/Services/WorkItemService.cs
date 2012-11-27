@@ -25,6 +25,11 @@ namespace ReleaseManager.Services
             string earlierBuild, 
             string laterBuild)
         {
+            if (string.IsNullOrWhiteSpace(earlierBuild))
+            {
+                throw new ArgumentOutOfRangeException("earlierBuild", earlierBuild, "Earlier build not set");
+            }
+
             var servers = serverConfigurationQuery.Execute();
             var serverUri = new Uri(servers["Server.TeamFoundation"]);
             var projectName = servers["Server.ProjectName"];

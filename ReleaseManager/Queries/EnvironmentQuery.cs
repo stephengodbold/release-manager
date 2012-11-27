@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using System.Linq;
 using Microsoft.VisualBasic.FileIO;
@@ -13,8 +14,8 @@ namespace ReleaseManager.Queries
         {
             var requestPath = new Uri(rootUri, "version.csv");
             var client = new WebClient();
-
             var contentStream = client.OpenRead(requestPath);
+
             using (var parser = new TextFieldParser(contentStream))
             {
                 parser.TextFieldType = FieldType.Delimited;
