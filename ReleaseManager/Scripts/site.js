@@ -13,14 +13,16 @@ function getBuildsForDate() {
             type: 'POST',
             url: 'Release/Builds/',
             data: 'date=' + dateFilter,
-            beforeSend: function () { disableDateSelector(); },
+            beforeSend: function () { prepareToFetchBuilds(); },
             success: function (result) { populateBuildList(result); },
             error: function () { buildListError(); }
         });
 }
 
-function disableDateSelector() {
-    $('.build-selector').attr('disabled', 'disabled');
+function prepareToFetchBuilds() {
+    $('.wide-selector').attr('disabled', 'disabled');
+    $('#loadingAnimation').fadeIn();
+    $('#messageBar').slideUp();
 }
 
 function populateBuildList(results) {
@@ -34,7 +36,8 @@ function populateBuildList(results) {
         }));
     });
 
-    $('.build-selector').removeAttr('disabled');
+    $('#loadingAnimation').fadeOut();
+    $('.wide-selector').removeAttr('disabled');
 }
 
 function buildListError() {
@@ -55,10 +58,16 @@ function getWorkItems() {
         {
             type: 'POST',
             url: 'Release/WorkItems/',
-            data: 'previousRelease=' + previousBuild +'&currentRelease=' + currentBuild,
+            data: 'previousRelease=' + previousBuild + '&currentRelease=' + currentBuild,
+            beforeSend: function () { prepareToFetchWorkItems(); },
             success: function (result) { populateReleaseNotes(result); },
             error: function () { releaseNotesError(); }
         });
+}
+
+function prepareToFetchWorkItems() {
+    $('#loadingAnimation').fadeIn();
+    $('#messageBar').slideUp();
 }
 
 function populateReleaseNotes(results) {
@@ -66,6 +75,7 @@ function populateReleaseNotes(results) {
     var template = Handlebars.compile(source);
 
     $('#workitemList').html(template(results));
+    $('#loadingAnimation').fadeOut();
     $('#buildSelection').fadeOut('fast');
     $('#buildDetails').fadeIn('slow');
     $('#releaseNotes').fadeIn('slow');
@@ -76,6 +86,8 @@ function releaseNotesError() {
         .html("<p>An error has occured while loading the work items. Try again soon</p>")
         .addClass('error')
         .slideDown('slow', 'swing');
+    $('#loadingAnimation').fadeOut();
 }
 
 $('#dateSelector').datepicker({ dateFormat: "yy-mm-dd" });
+$('#loadingAnimation').fadeOut();
