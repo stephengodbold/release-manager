@@ -21,8 +21,8 @@ namespace ReleaseManager.Services
         {
             var serverConfig = serverConfigurationQuery.Execute();
             return buildsForDateQuery.Execute(buildDate, 
-                new Uri(serverConfig["TeamFoundation"]), 
-                serverConfig["ProjectName"]).OrderBy(build => build);
+                new Uri(serverConfig["Server.TeamFoundation"]), 
+                serverConfig["Server.ProjectName"]).OrderBy(build => build);
         }
     }
 

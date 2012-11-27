@@ -26,8 +26,8 @@ namespace ReleaseManager.Services
             string laterBuild)
         {
             var servers = serverConfigurationQuery.Execute();
-            var serverUri = new Uri(servers["TeamFoundation"]);
-            var projectName = servers["ProjectName"];
+            var serverUri = new Uri(servers["Server.TeamFoundation"]);
+            var projectName = servers["Server.ProjectName"];
 
             var earlierBuildDetail = buildQuery.Execute(serverUri, projectName, string.IsNullOrWhiteSpace(earlierBuild) ? laterBuild : earlierBuild);
             var laterBuildDetail = buildQuery.Execute(serverUri, projectName, laterBuild);

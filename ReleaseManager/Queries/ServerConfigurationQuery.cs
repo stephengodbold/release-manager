@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 
 namespace ReleaseManager.Queries
 {
@@ -6,11 +8,12 @@ namespace ReleaseManager.Queries
     {
         public IDictionary<string, string> Execute()
         {
-            return new Dictionary<string, string>
-                       {
-                           {"TeamFoundation", "http://tfs.studygroup.com/tfs/StudyGroup"},
-                           {"ProjectName", "StudyGlobalDev" }
-                       };
+            var environmentKeys = ConfigurationManager.AppSettings.AllKeys
+                .Where(key => key.StartsWith("Server."));
+
+            return environmentKeys.ToDictionary(
+                environmentKey => environmentKey,
+                environmentKey => ConfigurationManager.AppSettings[environmentKey]);
         }
     }
 
