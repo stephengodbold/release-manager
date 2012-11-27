@@ -25,13 +25,15 @@ namespace ReleaseManager.Queries
         {
             using (var collection = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(serverUri))
             {
-                return earliestBuild.BranchRoot.Equals(latestBuild.BranchRoot, StringComparison.InvariantCultureIgnoreCase) ?
-                    GetWorkItemsFromOneBranch(earliestBuild, latestBuild, projectName, collection) :
-                    GetWorkItemsAcrossBranches(earliestBuild, latestBuild, projectName, collection);
+                var builds = earliestBuild.BranchRoot.Equals(latestBuild.BranchRoot, StringComparison.InvariantCultureIgnoreCase) ?
+                    GetBuildsFromOneBranch(earliestBuild, latestBuild, projectName, collection) :
+                    GetBuildsAcrossBranches(earliestBuild, latestBuild, projectName, collection);
+
+                return GetWorkItemsForBuilds(builds, collection, projectName);
             }
         }
 
-        private IEnumerable<WorkItem> GetWorkItemsAcrossBranches(
+        private IEnumerable<IBuildDetail> GetBuildsAcrossBranches(
             BuildDetail earliestBuild,
             BuildDetail latestBuild,
             string projectName,
@@ -57,10 +59,10 @@ namespace ReleaseManager.Queries
 
             var builds = firstResultSet.Builds.Union(secondResultSet.Builds);
 
-            return GetWorkItemsForBuilds(builds, collection, projectName);
+            return builds;
         }
 
-        private IEnumerable<WorkItem> GetWorkItemsFromOneBranch(
+        private IEnumerable<IBuildDetail> GetBuildsFromOneBranch(
                         BuildDetail earliestBuild,
                         BuildDetail latestBuild,
                         string projectName,
@@ -74,7 +76,7 @@ namespace ReleaseManager.Queries
             searchSpec.QueryDeletedOption = QueryDeletedOption.IncludeDeleted;
 
             var results = buildServer.QueryBuilds(searchSpec);
-            return GetWorkItemsForBuilds(results.Builds, collection, projectName);
+            return results.Builds;
         }
 
         private IEnumerable<WorkItem> GetWorkItemsForBuilds(
