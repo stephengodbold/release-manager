@@ -1,0 +1,78 @@
+﻿@model  ReleaseManager.Models.ReleaseNotes
+
+@{
+    ViewBag.Title = "Release Notes";
+}
+
+<h2>@Model.Title</h2>
+
+<div id="buildDetails" class="@(!string.IsNullOrWhiteSpace(Model.PreviousRelease) ? string.Empty : "hidden")">
+    <ul class="horizontal-list">
+        <li>
+            <strong>Previous Release:</strong>
+        </li>
+        <li id="previousReleaseName">
+            @Model.PreviousRelease
+        </li>
+        <li>
+            <strong>Current Release:</strong>
+        </li>
+        <li id="currentReleaseName">
+            @Model.CurrentRelease
+        </li>
+    </ul>
+    <strong>Target State:</strong>
+    @Html.DropDownList("StateSelector", @Model.States.Select(state => new SelectListItem
+                                                                      {
+                                                                          Selected = false,
+                                                                          Text = state,
+                                                                          Value = state
+                                                                      }), new { onChange = "highlightExceptionRows();" })
+</div>
+<div id="buildSelection" class="highlighted @(string.IsNullOrWhiteSpace(Model.PreviousRelease) ? string.Empty : "hidden"  )" >
+    <form>
+        @Html.HiddenFor(m => m.CurrentRelease)
+    </form>
+    <p>We don't have a starting build for this environment. Please choose a date, then a build to get the content.</p>
+    <ul class="horizontal-list">
+        <li><strong>Build Date:</strong></li>
+        <li><input id="dateSelector" type="text" onchange="getBuildsForDate();" /></li>
+        <li><strong>Build:</strong></li>
+        <li><select id="buildSelector" class="wide-selector" disabled="disabled"></select></li>
+        <li><input type="submit" id="submitBuild" onclick="getWorkItems();" /></li>
+    </ul>
+    <div id="loadingAnimation" class="right-aligned-animation">
+        <div class="outer-ball"></div>
+        <div class="inner-ball"></div>
+    </div>
+</div>
+<table id="releaseNotes" class="@(Model.Items.Any() ? string.Empty : "hidden")">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>State</th> 
+        </tr>
+    </thead>
+    <tbody id="workitemList">
+        @{
+            foreach(var workItem in Model.Items)
+            {
+                <tr data-state="@workItem.State">
+                    <td>@workItem.Id</td>
+                    <td>@workItem.Description</td>
+                    <td>@workItem.State</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<script id="workitem-template" type="text/x-handlebars-template">
+    {{#each workitem}}
+        <tr data-state="{{State}}"> 
+            <td>{{Id}}</td> 
+            <td>{{Description}}</td> 
+            <td>{{State}}</td>
+        </tr>
+    {{/each}}
+</script>
