@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Web.Mvc;
+using ReleaseManager.Models;
 using ReleaseManager.Services;
 
 namespace ReleaseManager.Controllers
@@ -14,7 +17,18 @@ namespace ReleaseManager.Controllers
 
         public ActionResult Index()
         {
-            return View(environmentService.GetEnvironments());
+            IEnumerable<Environment> model;
+
+            try
+            {
+                model = environmentService.GetEnvironments();
+            } 
+            catch (WebException)
+            {
+                model = new Environment[] {};
+            }
+
+            return View(model);
         }
     }
 }
