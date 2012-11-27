@@ -98,24 +98,25 @@ namespace ReleaseManager.Queries
                     "The configured category name was not found");
             }
 
-            IEnumerable<WorkItem> allWorkItems = new Collection<WorkItem>();
+            IEnumerable<WorkItem> allWorkItems = new WorkItem[] {};
 
             foreach (var summaries in results.Select(InformationNodeConverters.GetAssociatedWorkItems))
             {
-                var items = summaries
-                                .Where(summary =>
-                                    {
-                                        var wi = workItemService.GetWorkItem(summary.WorkItemId);
-                                        return category.Contains(wi.Type);
-                                    })
-                                .Select(wi => new WorkItem
-                                    {
-                                        Id = wi.WorkItemId.ToString(CultureInfo.InvariantCulture),
-                                        Description = wi.Title,
-                                        State = wi.Status
-                                    });
+                var workItems = new Collection<WorkItem>();
 
-                allWorkItems = allWorkItems.Union(items);
+                foreach (var wi in summaries
+                            .Select(summary => workItemService.GetWorkItem(summary.WorkItemId))
+                            .Where(wi => category.Contains(wi.Type)))
+                {
+                    workItems.Add(new WorkItem
+                                      {
+                                          Id = wi.Id.ToString(CultureInfo.InvariantCulture),
+                                          Description = wi.Title,
+                                          State = wi.State
+                                      });
+                }
+
+                allWorkItems = allWorkItems.Union(workItems).ToArray();
             }
 
             return allWorkItems.OrderByDescending(wi => wi.Id).ToArray();
