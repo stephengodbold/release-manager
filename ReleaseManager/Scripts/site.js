@@ -71,14 +71,29 @@ function prepareToFetchWorkItems() {
 }
 
 function populateReleaseNotes(results) {
-    var source = $("#workitem-template").html();
-    var template = Handlebars.compile(source);
-
-    $('#workitemList').html(template(results));
+    populateStateSelector(results);
+    populateWorkItems(results);
+    
     $('#loadingAnimation').fadeOut();
     $('#buildSelection').fadeOut('fast');
     $('#buildDetails').fadeIn('slow');
     $('#releaseNotes').fadeIn('slow');
+}
+
+function populateWorkItems(results) {
+    var workItemSource = $("#workitem-template").html();
+    var workItemTemplate = Handlebars.compile(workItemSource);
+
+    $('#workitemList').find('tr').remove();
+    $('#workitemList').html(workItemTemplate(results));
+}
+
+function populateStateSelector(results) {
+    var stateSource = $("#state-template").html();
+    var stateTemplate = Handlebars.compile(stateSource);
+
+    $('#StateSelector').find('option').remove();
+    $('#StateSelector').html(stateTemplate(results));
 }
 
 function releaseNotesError() {

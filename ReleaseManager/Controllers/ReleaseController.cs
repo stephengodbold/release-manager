@@ -27,13 +27,13 @@ namespace ReleaseManager.Controllers
                             Title = "Release Notes",
                             CurrentRelease = currentRelease,
                             PreviousRelease = previousRelease,
-                            States = new[] { "Active", "Resolved", "Testing" }
+                            States = new string[] {}
                         };
 
             try
             {
-                var items = workItemService.GetWorkItems(previousRelease, currentRelease);
-                model.Items = items;
+                model.Items = workItemService.GetWorkItems(previousRelease, currentRelease);
+                model.States = workItemService.GetStates();
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -52,9 +52,13 @@ namespace ReleaseManager.Controllers
         [HttpPost]
         public JsonResult WorkItems(string previousRelease, string currentRelease)
         {
-            return Json( new { workitem = workItemService.GetWorkItems(previousRelease, currentRelease)},
-                 "application/json",
-                 Encoding.UTF8
+            return Json( 
+                new { 
+                    workitems = workItemService.GetWorkItems(previousRelease, currentRelease),
+                    states = workItemService.GetStates()
+                },
+                "application/json",
+                Encoding.UTF8
             );
         }
     }

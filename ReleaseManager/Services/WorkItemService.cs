@@ -40,10 +40,16 @@ namespace ReleaseManager.Services
 
             return workItems;
         }
+
+        public IEnumerable<string> GetStates()
+        {
+            return new[] { "Active", "Resolved", "Testing"};
+        }
     }
 
     public interface IWorkItemService
     {
         IEnumerable<WorkItem> GetWorkItems(string earlierBuild, string laterBuild);
+        IEnumerable<string> GetStates();
     }
 }

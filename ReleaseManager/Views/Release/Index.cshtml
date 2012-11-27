@@ -27,7 +27,10 @@
                                                                           Selected = false,
                                                                           Text = state,
                                                                           Value = state
-                                                                      }), new { onChange = "highlightExceptionRows();" })
+                                                                      }), 
+                                                                      new { 
+                                                                          onChange = "highlightExceptionRows();",
+                                                                      })
 </div>
 <div id="buildSelection" class="highlighted @(string.IsNullOrWhiteSpace(Model.PreviousRelease) ? string.Empty : "hidden"  )" >
     <form>
@@ -68,11 +71,16 @@
     </tbody>
 </table>
 <script id="workitem-template" type="text/x-handlebars-template">
-    {{#each workitem}}
+    {{#each workitems}}
         <tr data-state="{{State}}"> 
             <td>{{Id}}</td> 
             <td>{{Description}}</td> 
             <td>{{State}}</td>
         </tr>
+    {{/each}}
+</script>
+<script id="state-template" type="text/x-handlebars-template">
+    {{#each states}}
+        <option value="{{this}}">{{this}}</option>
     {{/each}}
 </script>
