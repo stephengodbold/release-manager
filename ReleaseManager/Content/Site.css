@@ -57,6 +57,10 @@ ul {
     padding-left: 10px;
 }
 
+.build-selector {
+    min-width: 175px;
+}
+
 .error{
     background-color: pink;
     border: 2px red dotted;

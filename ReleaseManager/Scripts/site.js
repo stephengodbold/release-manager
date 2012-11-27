@@ -6,16 +6,21 @@
 }
 
 function getBuildsForDate() {
-    var dateFilter = $('#buildFilterDate').val();
+    var dateFilter = $('#dateSelector').val();
 
     $.ajax(
         {
             type: 'POST',
             url: 'Release/Builds/',
             data: 'date=' + dateFilter,
+            beforeSend: function () { disableDateSelector(); },
             success: function (result) { populateBuildList(result); },
             error: function () { buildListError(); }
         });
+}
+
+function disableDateSelector() {
+    $('.build-selector').attr('disabled', 'disabled');
 }
 
 function populateBuildList(results) {
@@ -29,7 +34,7 @@ function populateBuildList(results) {
         }));
     });
 
-    $('#buildSelectionDisplay').show('slow');
+    $('.build-selector').removeAttr('disabled');
 }
 
 function buildListError() {
@@ -72,6 +77,4 @@ function releaseNotesError() {
         .slideDown('slow', 'swing');
 }
 
-$('#buildFilterDate').datepicker({ dateFormat: "yy-mm-dd" });
-$('#buildSelectionDisplay').hide();
-$('#buildListError').hide();
+$('#dateSelector').datepicker({ dateFormat: "yy-mm-dd" });
