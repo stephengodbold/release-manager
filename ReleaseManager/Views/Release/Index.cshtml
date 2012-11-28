@@ -29,25 +29,25 @@
                                                                           Value = state
                                                                       }), 
                                                                       new { 
-                                                                          onChange = "highlightExceptionRows();",
+                                                                          multiple = "multiple"
                                                                       })
 </div>
 <div id="buildSelection" class="highlighted @(string.IsNullOrWhiteSpace(Model.PreviousRelease) ? string.Empty : "hidden"  )" >
     <form>
         @Html.HiddenFor(m => m.CurrentRelease)
+        <p>We don't have a starting build for this environment. Please choose a date, then a build to get the content.</p>
+        <ul class="horizontal-list">
+            <li><strong>Build Date:</strong></li>
+            <li><input id="dateSelector" type="text" /></li>
+            <li><strong>Build:</strong></li>
+            <li><select id="buildSelector" class="wide-selector" disabled="disabled"></select></li>
+            <li><input type="submit" id="submitBuild" /></li>
+        </ul>
+        <div id="loadingAnimation" class="right-aligned-animation">
+            <div class="outer-ball"></div>
+            <div class="inner-ball"></div>
+        </div>
     </form>
-    <p>We don't have a starting build for this environment. Please choose a date, then a build to get the content.</p>
-    <ul class="horizontal-list">
-        <li><strong>Build Date:</strong></li>
-        <li><input id="dateSelector" type="text" onchange="getBuildsForDate();" /></li>
-        <li><strong>Build:</strong></li>
-        <li><select id="buildSelector" class="wide-selector" disabled="disabled"></select></li>
-        <li><input type="submit" id="submitBuild" onclick="getWorkItems();" /></li>
-    </ul>
-    <div id="loadingAnimation" class="right-aligned-animation">
-        <div class="outer-ball"></div>
-        <div class="inner-ball"></div>
-    </div>
 </div>
 <table id="releaseNotes" class="@(Model.Items.Any() ? string.Empty : "hidden")">
     <thead>
