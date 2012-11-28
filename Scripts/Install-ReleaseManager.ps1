@@ -3,20 +3,23 @@
 param(
     [Parameter(Mandatory=$true)]
     [string]
-    $buildName,
+    $build,
     
     [Parameter(Mandatory=$true)]
     [string]
-    $environment
+    $environment,
+
+    [string]
+    $sourcePathOverride
 )
 
 $environments = @{
                 Local = @{
-                    PhysicalPath = '';
+                    PhysicalPath = 'C:\inetpub\ReleaseManager';
                     SiteName = 'ReleaseManager';
                     IPAddress = '*';
                     Port = 80;
-                    HostHeader = 'rm.studygroup.com';
+                    HostHeader = 'local.releasemanager.com';
                 };
                 Prod = @{
                     PhysicalPath = '';
@@ -81,8 +84,8 @@ function Set-ApplicationPool {
         $environment
     )
 
-    $siteName = $environment.get_Value('SiteName')
-    $applicationPoolPath = Join-Path "IIS:\ApplicationPools" $siteName
+    $siteName = $environment.get_Item('SiteName')
+    $applicationPoolPath = Join-Path "IIS:\AppPools" $siteName
 
     if (Test-Path $applicationPoolPath) {
         Remove-WebAppPool -Name $siteName
@@ -95,9 +98,10 @@ function Set-ApplicationPool {
 
     $credential = Get-Credential
     $customIdentityType = 3
+    $password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($credential.Password));
 
     $applicationPool.processModel.username = $credential.UserName
-    $applicationPool.processModel.password = $credential.Password
+    $applicationPool.processModel.password = $password
     $applicationPool.processMOdel.identityType = $customIdentityType
 
     $applicationPool | Set-Item
@@ -110,12 +114,16 @@ function Set-WebSite {
         $environment
     )
 
-    $siteName = $environment.get_Value('SiteName')
-    $physicalPath = $environment.get_Value('PhysicalPath')
+    $siteName = $environment.get_Item('SiteName')
+    $physicalPath = $environment.get_Item('PhysicalPath')
     $sitePath = Join-Path "IIS:\Sites" $siteName
 
     if (Test-Path $sitePath) {
         return
+    }
+
+    if (-not (Test-Path $physicalPath)) {
+        New-Item $physicalPath -ItemType Directory
     }
     
     New-Website -Name $siteName -ApplicationPool $siteName -PhysicalPath $physicalPath
@@ -128,10 +136,10 @@ function Set-Bindings {
         $environment
     )
 
-    $site = $environment.get_Value('SiteName')
-    $ipAddress = $environment.get_Value('IPAddress')
-    $header = $ipAddress = $environment.get_Value('HostHeader')
-    $port = $environment.get_Value('Port')
+    $site = $environment.get_Item('SiteName')
+    $ipAddress = $environment.get_Item('IPAddress')
+    $header = $environment.get_Item('HostHeader')
+    $port = $environment.get_Item('Port')
 
     Get-WebBinding -Name $site |
         foreach { 
@@ -145,14 +153,20 @@ function Set-Bindings {
                 -Protocol 'http'
 }
 
-$buildRoot = '\\AUSYDITDSVR0013\Builds2\'
-$sourcePath = Join-Path $buildRoot $buildName
-$environment = Get-Environment $environment 
+$buildRoot = '\\AUSYDITDSVR0013\Builds2\Release Manager CI\'
+$sourcePathRoot = Join-Path $buildRoot $build 
+$sourcePath = Join-Path $sourcePathRoot '_PublishedWebsites\ReleaseManager'
+$environmentParamaters = Get-Environment $environment 
+$physicalPath = $environmentParamaters['PhysicalPath']
 
-Set-ApplicationPool $environment
-Set-WebSite $environment
-Set-Bindings $environment
+if (-not [String]::IsNullOrWhiteSpace($sourcePathOverride)) {
+    $sourcePath = $sourcePathOverride       
+}
 
-Clear-Content $environment['PhysicalPath']
+Set-ApplicationPool $environmentParamaters
+Set-WebSite $environmentParamaters
+Set-Bindings $environmentParamaters
+
+Clear-Content $physicalPath
 Copy-Content $sourcePath $physicalPath
-& .\Set-Version.ps1 $buildName $physicalPath
+& .\Set-Version.ps1 $build $physicalPath

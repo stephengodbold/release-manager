@@ -22,17 +22,18 @@ function Get-PreviousVersion {
     if (-not(Test-Path $versionTextPath)) {
         return
     }
+
     $versionFileContent = Import-Csv $versionTextPath
     return $versionFileContent.CurrentVersion
 }
 
 $versionTextPath = Join-Path $rootPath 'version.csv'
+$previousVersion = Get-PreviousVersion $versionTextPath
 
 if (-not(Test-Path $versionTextPath)) {
     New-Item $versionTextPath -ItemType File
 }
 
-$previousVersion = Get-PreviousVersion $versionTextPath
 $version = New-Object PSObject -Property `
             @{ 
                 CurrentVersion = $versionText;
