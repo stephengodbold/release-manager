@@ -31,4 +31,28 @@ namespace ReleaseManager.Services
     {
         IEnumerable<Environment> GetEnvironments();
     }
+
+    public class StubEnvironmentService : IEnvironmentService
+    {
+        public IEnumerable<Environment> GetEnvironments()
+        {
+            return new[]
+                       {
+                           new Environment
+                               {
+                                   CurrentBuild = "Build 1",
+                                   LastReleaseDate = DateTime.Now.AddDays(-1).ToShortDateString(),
+                                   Name = "Demo",
+                                   PreviousBuild = string.Empty
+                               },
+                            new Environment
+                               {
+                                   CurrentBuild = "Build 2",
+                                   LastReleaseDate = DateTime.Now.AddDays(-20).ToShortDateString(),
+                                   Name = "Test",
+                                   PreviousBuild = string.Empty
+                               },
+                       };
+        }
+    }
 }

@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿using System.Linq;
+using System.Configuration;
+using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -40,19 +42,39 @@ namespace ReleaseManager
                             .BasedOn<IController>()
                             .LifestyleTransient());
 
-            RegisterServices();
+            var demoMode = ConfigurationManager.AppSettings.AllKeys.Contains("System.InDemoMode") &&
+                           bool.Parse(ConfigurationManager.AppSettings["System.InDemoMode"]);
+
+            RegisterServices(demoMode);
             RegisterQueries();
         }
 
-        private void RegisterServices()
+        private void RegisterServices(bool demoMode)
         {
             container.Register(Classes.FromThisAssembly()
-                                   .BasedOn<IEnvironmentService>()
+                                   .BasedOn<IConfigurationService>()
                                    .LifestylePerWebRequest()
                                    .WithServiceAllInterfaces());
 
+            if (demoMode)
+            {
+                container.Register(Classes.FromThisAssembly()
+                                   .BasedOn<StubEnvironmentService>()
+                                   .LifestylePerWebRequest()
+                                   .WithServiceAllInterfaces());
+                container.Register(Classes.FromThisAssembly()
+                                       .BasedOn<StubBuildService>()
+                                       .LifestylePerWebRequest()
+                                       .WithServiceAllInterfaces());
+                container.Register(Classes.FromThisAssembly()
+                                       .BasedOn<StubWorkItemService>()
+                                       .LifestylePerWebRequest()
+                                       .WithServiceAllInterfaces());
+                return;
+            }
+
             container.Register(Classes.FromThisAssembly()
-                                   .BasedOn<IConfigurationService>()
+                                   .BasedOn<IEnvironmentService>()
                                    .LifestylePerWebRequest()
                                    .WithServiceAllInterfaces());
 

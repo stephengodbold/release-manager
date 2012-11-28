@@ -22,7 +22,7 @@ namespace ReleaseManager.Services
         }
 
         public IEnumerable<WorkItem> GetWorkItems(
-            string earlierBuild, 
+            string earlierBuild,
             string laterBuild)
         {
             if (string.IsNullOrWhiteSpace(earlierBuild))
@@ -43,7 +43,57 @@ namespace ReleaseManager.Services
 
         public IEnumerable<string> GetStates()
         {
-            return new[] { "Active", "Resolved", "Testing"};
+            return new[] { "Active", "Resolved", "Testing" };
+        }
+    }
+
+    public class StubWorkItemService : IWorkItemService
+    {
+        public IEnumerable<WorkItem> GetWorkItems(string earlierBuild, string laterBuild)
+        {
+            return new[]
+                       {
+                           new WorkItem
+                               {
+                                   Description = "Work Item: Do some stuff",
+                                   Id = "1",
+                                   Release = "Release 1",
+                                   State = "Resolved"
+                               },
+                            new WorkItem
+                               {
+                                   Description = "Work Item: Do some stuff",
+                                   Id = "2",
+                                   Release = "Release 1",
+                                   State = "Resolved"
+                               },
+                            new WorkItem
+                               {
+                                   Description = "Work Item: Do some stuff",
+                                   Id = "3",
+                                   Release = "Release 1",
+                                   State = "Testing"
+                               },
+                            new WorkItem
+                               {
+                                   Description = "Work Item: Do some stuff",
+                                   Id = "4",
+                                   Release = "Release 2",
+                                   State = "Ready for Development"
+                               },
+                            new WorkItem
+                               {
+                                   Description = "Work Item: Do some stuff",
+                                   Id = "5",
+                                   Release = "Release 3",
+                                   State = "Active"
+                               },
+                       };
+        }
+
+        public IEnumerable<string> GetStates()
+        {
+            return new[] { "Active", "Resolved", "Testing" };
         }
     }
 

@@ -26,6 +26,14 @@ namespace ReleaseManager.Services
         }
     }
 
+    public class StubBuildService : IBuildService
+    {
+        public IEnumerable<string> GetBuilds(DateTime buildDate)
+        {
+            return new[] { "Build 1", "Build 2", "Build 3"};
+        }
+    }
+
     public interface IBuildService
     {
         IEnumerable<string> GetBuilds(DateTime buildDate);
