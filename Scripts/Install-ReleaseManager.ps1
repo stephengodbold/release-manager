@@ -26,7 +26,7 @@ $environments = @{
                     SiteName = 'ReleaseManager';
                     IPAddress = '*';
                     Port = 80;
-                    HostHeader = 'rm.studygroup.com';
+                    HostHeader = 'releasemanager.studygroup.com';
                 };
             }
 
@@ -49,7 +49,10 @@ function Copy-Content {
         New-Item $targetPath -ItemType Directory
     }
 
-    Copy-Item $sourcePath $targetPath -Recurse
+    Get-ChildItem $sourcePath | 
+        foreach {
+            Copy-Item $_.FullName $targetPath -Recurse    
+        }
 }
 
 function Clear-Content {
@@ -102,7 +105,8 @@ function Set-ApplicationPool {
 
     $applicationPool.processModel.username = $credential.UserName
     $applicationPool.processModel.password = $password
-    $applicationPool.processMOdel.identityType = $customIdentityType
+    $applicationPool.processModel.identityType = $customIdentityType
+    $applicationPool.enable32BitAppOnWin64 = $true
 
     $applicationPool | Set-Item
 }
