@@ -22,10 +22,10 @@ $environments = @{
                     HostHeader = 'local.releasemanager.com';
                 };
                 Prod = @{
-                    PhysicalPath = '';
+                    PhysicalPath = 'C:\inetpub\ReleaseManager';
                     SiteName = 'ReleaseManager';
                     IPAddress = '*';
-                    Port = 80;
+                    Port = 8010;
                     HostHeader = 'releasemanager.studygroup.com';
                 };
             }
@@ -95,18 +95,18 @@ function Set-ApplicationPool {
     }
 
     $applicationPool = New-WebAppPool -Name $siteName
-
-    $applicationPool | Set-ItemProperty -Name 'managedRuntimeVersion' -Value 'v4.0'
-    $applicationPool | Set-ItemProperty -Name 'managedPipelineMode' -Value 'Integrated'
-
+        
     $credential = Get-Credential
     $customIdentityType = 3
+    $integratedPipelineMode = 0
     $password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($credential.Password));
 
     $applicationPool.processModel.username = $credential.UserName
     $applicationPool.processModel.password = $password
     $applicationPool.processModel.identityType = $customIdentityType
     $applicationPool.enable32BitAppOnWin64 = $true
+    $applicationPool.managedRuntimeVersion = 'v4.0'
+    $applicationPool.managedPipelineMode = $integratedPipelineMode
 
     $applicationPool | Set-Item
 }
@@ -163,7 +163,7 @@ $sourcePath = Join-Path $sourcePathRoot '_PublishedWebsites\ReleaseManager'
 $environmentParamaters = Get-Environment $environment 
 $physicalPath = $environmentParamaters['PhysicalPath']
 
-if (-not [String]::IsNullOrWhiteSpace($sourcePathOverride)) {
+if (-not [String]::IsNullOrEmpty($sourcePathOverride)) {
     $sourcePath = $sourcePathOverride       
 }
 
