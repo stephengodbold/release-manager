@@ -14,7 +14,7 @@ param(
 )
 
 $environments = @{
-                Local = @{
+                Local = @{                
                     PhysicalPath = 'C:\inetpub\ReleaseManager';
                     SiteName = 'ReleaseManager';
                     IPAddress = '*';
@@ -157,6 +157,40 @@ function Set-Bindings {
                 -Protocol 'http'
 }
 
+function Set-LocalRedirection {
+    param(
+        [Parameter(Mandatory=$true)]
+        [Hashtable]
+        $environment
+    )
+    $header = $environment.get_Item('HostHeader')
+    $redirection = "127.0.0.1 	$header    #added by Install-ReleaseManager.ps1"
+    $hostsPath = Join-Path $env:windir 'system32\drivers\etc\hosts'
+    $hostsContent = Get-Content $hostsPath
+    
+
+    if ($hostsContent -contains $redirection) {
+        return        
+    }
+
+    $hostsContent += $redirection
+    Set-Content $hostsPath $hostsContent
+}
+
+function Test-Elevation {
+    $principal = New-Object `
+        System.Security.Principal.WindowsPrincipal(
+        [System.Security.Principal.WindowsIdentity]::GetCurrent())
+    $role = [System.Security.Principal.WindowsBuiltInRole]::Administrator
+
+    return $principal.IsInRole($role)
+}
+
+
+if (-not (Test-Elevation)) {
+    Write-Error 'This script must be run in an elevated session'
+}
+
 $buildRoot = '\\AUSYDITDSVR0013\Builds2\Release Manager CI\'
 $sourcePathRoot = Join-Path $buildRoot $build 
 $sourcePath = Join-Path $sourcePathRoot '_PublishedWebsites\ReleaseManager'
@@ -174,3 +208,7 @@ Set-Bindings $environmentParamaters
 Clear-Content $physicalPath
 Copy-Content $sourcePath $physicalPath
 & .\Set-Version.ps1 $build $physicalPath
+
+if ($environment -eq 'Local') {
+    Set-LocalRedirection $environmentParamaters
+}
