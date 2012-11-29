@@ -5,7 +5,7 @@
         var state = $('#StateSelector').val();
 
         $('tr').removeClass('exception');
-        $('tbody').children(":not([data-state='" + state + "'])").addClass('exception');
+        $('tbody').children("[data-state='" + state + "']").addClass('exception');
     }
 
     function getBuildsForDate() {
