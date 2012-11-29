@@ -77,6 +77,25 @@ ul {
     border: 2px green dotted;
 }
 
+.beta-tag {
+    height: 40px;
+    width: 400px;
+    position: fixed;
+    top: 50px;
+    right: -110px;
+    background-color: crimson;
+    color: white;
+    font-size: x-large;
+    font-weight: bolder;
+    text-align: center;
+    border: 3px whitesmoke solid;
+
+    /*Vendor specific rotations until they support rotate:*/
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+}
+
 /* Styles for basic forms
 -----------------------------------------------------------*/
 fieldset {

@@ -5,6 +5,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseManager", "ReleaseMa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseManager.Tests", "ReleaseManager.Tests\ReleaseManager.Tests.csproj", "{BDB64329-04B7-4A16-A164-DBEE4D1853AD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{5B838FC3-0E57-486D-9BA8-55B648A74531}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\Install-ReleaseManager.ps1 = Scripts\Install-ReleaseManager.ps1
+		Scripts\Set-Version.ps1 = Scripts\Set-Version.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 3
