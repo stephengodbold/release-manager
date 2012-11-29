@@ -14,15 +14,22 @@ namespace ReleaseManager.Queries
         {
             var requestPath = new Uri(rootUri, "version.csv");
             var client = new WebClient();
-            var contentStream = client.OpenRead(requestPath);
+            var environment = new Environment { Name = rootUri.Host };
+            Stream contentStream;
+
+            try
+            {
+                contentStream = client.OpenRead(requestPath);
+            } catch (WebException)
+            {
+                return environment;
+            }
 
             using (var parser = new TextFieldParser(contentStream))
             {
                 parser.TextFieldType = FieldType.Delimited;
                 parser.SetDelimiters(",");
                 parser.CommentTokens = new[] {"#"};
-
-                var environment = new Environment { Name = rootUri.Host };
 
                 while (!parser.EndOfData)
                 {
