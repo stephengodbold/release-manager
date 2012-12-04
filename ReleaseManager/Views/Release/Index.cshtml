@@ -67,6 +67,9 @@
         }
     </tbody>
 </table>
+<div id="noRows" class="@(Model.Items.Any() ? "hidden" : string.Empty)">
+    <p>No work items available for the selected builds</p>
+</div>
 <script id="workitem-template" type="text/x-handlebars-template">
     {{#each workitems}}
         <tr data-state="{{State}}"> 

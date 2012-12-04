@@ -79,6 +79,10 @@
         populateStateSelector(results);
         populateWorkItems(results);
 
+        if (results.count > 0) {
+            $('#noRows').hide();
+        }
+
         $('#loadingAnimation').fadeOut();
         $('#buildSelection').fadeOut('fast');
         $('#buildDetails').fadeIn('slow');
