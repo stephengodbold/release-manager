@@ -23,6 +23,11 @@ namespace ReleaseManager.Queries
 
         public IEnumerable<WorkItem> Execute(BuildDetail earliestBuild, BuildDetail latestBuild, Uri serverUri, string projectName)
         {
+            if (earliestBuild == null || latestBuild == null)
+            {
+                return new WorkItem[] {};
+            }
+
             using (var collection = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(serverUri))
             {
                 var builds = earliestBuild.BranchRoot.Equals(latestBuild.BranchRoot, StringComparison.InvariantCultureIgnoreCase) ?

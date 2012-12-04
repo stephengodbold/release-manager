@@ -14,6 +14,12 @@ namespace ReleaseManager.Queries
             using (var collection = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(projectCollectionUri))
             {
                 var buildDetail = GetBuildDetail(collection, projectName, buildName);
+
+                if (buildDetail == null)
+                {
+                    return null;
+                }
+
                 var changes = InformationNodeConverters.GetAssociatedChangesets(buildDetail);
 
                 var branchRoot = string.Empty;
@@ -73,8 +79,8 @@ namespace ReleaseManager.Queries
             searchSpec.BuildNumber = buildName;
             searchSpec.QueryDeletedOption = QueryDeletedOption.IncludeDeleted;
             var results = buildServer.QueryBuilds(searchSpec);
-            
-            return results.Builds.First();
+
+            return results.Builds.FirstOrDefault();
         }
     }
 

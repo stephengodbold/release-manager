@@ -36,6 +36,12 @@ namespace ReleaseManager.Services
 
             var earlierBuildDetail = buildQuery.Execute(serverUri, projectName, string.IsNullOrWhiteSpace(earlierBuild) ? laterBuild : earlierBuild);
             var laterBuildDetail = buildQuery.Execute(serverUri, projectName, laterBuild);
+
+            if (earlierBuildDetail == null || laterBuildDetail == null)
+            {
+                return new WorkItem[] {};
+            }
+
             var workItems = buildWorkItemQuery.Execute(earlierBuildDetail, laterBuildDetail, serverUri, projectName);
 
             return workItems;
