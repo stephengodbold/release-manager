@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Net.Mime;
 using System.Text;
 using System.Web.Mvc;
+using ReleaseManager.Common;
 using ReleaseManager.Models;
 using ReleaseManager.Services;
 
@@ -22,25 +22,24 @@ namespace ReleaseManager.Controllers
 
         public ActionResult Index(string currentRelease, string previousRelease)
         {
-            var model = new ReleaseNotes
-                        {
-                            Title = "Release Notes",
-                            CurrentRelease = currentRelease,
-                            PreviousRelease = previousRelease,
-                            States = new string[] {}
-                        };
-
             try
             {
-                model.Items = workItemService.GetWorkItems(previousRelease, currentRelease);
-                model.States = workItemService.GetStates();
+                var model = workItemService.GetReleaseNotes(previousRelease, currentRelease);
+                return View(model);
             }
             catch (ArgumentOutOfRangeException)
             {
-                model.Items = new Collection<WorkItem>();
-            }
+                var model = new ReleaseNotes
+                {
+                    Title = "Release Notes",
+                    CurrentRelease = currentRelease,
+                    PreviousRelease = previousRelease,
+                    States = new string[] { },
+                    Items = new Collection<WorkItem>()
+                };
 
-            return View(model);
+                return View(model);
+            }
         }
 
         [HttpPost]
@@ -52,14 +51,29 @@ namespace ReleaseManager.Controllers
         [HttpPost]
         public JsonResult WorkItems(string previousRelease, string currentRelease)
         {
+            var releaseNotes = workItemService.GetReleaseNotes(previousRelease, currentRelease);
+
             return Json( 
                 new { 
-                    workitems = workItemService.GetWorkItems(previousRelease, currentRelease),
-                    states = workItemService.GetStates()
+                    workitems = releaseNotes.Items,
+                    states = releaseNotes.States
                 },
                 "application/json",
                 Encoding.UTF8
             );
+        }
+
+        [HttpGet]
+        [ActionName("WorkItems")]
+        public CsvResult WorkItemsCsv(string previousRelease, string currentRelease)
+        {
+            var releaseNotes = workItemService.GetReleaseNotes(previousRelease, currentRelease);
+
+            return new CsvResult
+                       {
+                           Content = releaseNotes.CsvItems,
+                           Filename = "ReleaseNotes.csv",
+                       };
         }
     }
 }

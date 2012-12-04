@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ReleaseManager.Models;
 using ReleaseManager.Queries;
 
@@ -10,18 +11,22 @@ namespace ReleaseManager.Services
         private readonly IBuildWorkItemQuery buildWorkItemQuery;
         private readonly IBuildQuery buildQuery;
         private readonly IServerConfigurationQuery serverConfigurationQuery;
+        private readonly ICsvFormatter csvFormatter;
 
         public WorkItemService(
             IBuildWorkItemQuery buildWorkItemQuery,
             IBuildQuery buildQuery,
-            IServerConfigurationQuery serverConfigurationQuery)
+            IServerConfigurationQuery serverConfigurationQuery,
+            ICsvFormatter csvFormatter
+            )
         {
             this.buildWorkItemQuery = buildWorkItemQuery;
             this.buildQuery = buildQuery;
             this.serverConfigurationQuery = serverConfigurationQuery;
+            this.csvFormatter = csvFormatter;
         }
 
-        public IEnumerable<WorkItem> GetWorkItems(
+        public ReleaseNotes GetReleaseNotes(
             string earlierBuild,
             string laterBuild)
         {
@@ -39,12 +44,25 @@ namespace ReleaseManager.Services
 
             if (earlierBuildDetail == null || laterBuildDetail == null)
             {
-                return new WorkItem[] {};
+                return new ReleaseNotes();
             }
 
-            var workItems = buildWorkItemQuery.Execute(earlierBuildDetail, laterBuildDetail, serverUri, projectName);
+            var workItems = buildWorkItemQuery.Execute(earlierBuildDetail, 
+                                                    laterBuildDetail, 
+                                                    serverUri, 
+                                                    projectName).ToArray();
 
-            return workItems;
+            var releaseNotes = new ReleaseNotes
+                                   {
+                                       Items = workItems,
+                                       CsvItems = csvFormatter.EncodeAsCsv(workItems),
+                                       PreviousRelease = earlierBuild,
+                                       CurrentRelease = laterBuild,
+                                       States = GetStates(),
+                                       Title = "Release Notes"
+                                   };
+
+            return releaseNotes;
         }
 
         public IEnumerable<string> GetStates()
@@ -55,45 +73,48 @@ namespace ReleaseManager.Services
 
     public class StubWorkItemService : IWorkItemService
     {
-        public IEnumerable<WorkItem> GetWorkItems(string earlierBuild, string laterBuild)
+        public ReleaseNotes GetReleaseNotes(string earlierBuild, string laterBuild)
         {
-            return new[]
+            return new ReleaseNotes
                        {
-                           new WorkItem
+                           Items = new[]
                                {
-                                   Description = "Work Item: Do some stuff",
-                                   Id = "1",
-                                   Release = "Release 1",
-                                   State = "Resolved"
-                               },
-                            new WorkItem
-                               {
-                                   Description = "Work Item: Do some stuff",
-                                   Id = "2",
-                                   Release = "Release 1",
-                                   State = "Resolved"
-                               },
-                            new WorkItem
-                               {
-                                   Description = "Work Item: Do some stuff",
-                                   Id = "3",
-                                   Release = "Release 1",
-                                   State = "Testing"
-                               },
-                            new WorkItem
-                               {
-                                   Description = "Work Item: Do some stuff",
-                                   Id = "4",
-                                   Release = "Release 2",
-                                   State = "Ready for Development"
-                               },
-                            new WorkItem
-                               {
-                                   Description = "Work Item: Do some stuff",
-                                   Id = "5",
-                                   Release = "Release 3",
-                                   State = "Active"
-                               },
+                                   new WorkItem
+                                       {
+                                           Description = "Work Item: Do some stuff",
+                                           Id = "1",
+                                           Release = "Release 1",
+                                           State = "Resolved"
+                                       },
+                                   new WorkItem
+                                       {
+                                           Description = "Work Item: Do some stuff",
+                                           Id = "2",
+                                           Release = "Release 1",
+                                           State = "Resolved"
+                                       },
+                                   new WorkItem
+                                       {
+                                           Description = "Work Item: Do some stuff",
+                                           Id = "3",
+                                           Release = "Release 1",
+                                           State = "Testing"
+                                       },
+                                   new WorkItem
+                                       {
+                                           Description = "Work Item: Do some stuff",
+                                           Id = "4",
+                                           Release = "Release 2",
+                                           State = "Ready for Development"
+                                       },
+                                   new WorkItem
+                                       {
+                                           Description = "Work Item: Do some stuff",
+                                           Id = "5",
+                                           Release = "Release 3",
+                                           State = "Active"
+                                       },
+                               }
                        };
         }
 
@@ -105,7 +126,7 @@ namespace ReleaseManager.Services
 
     public interface IWorkItemService
     {
-        IEnumerable<WorkItem> GetWorkItems(string earlierBuild, string laterBuild);
+        ReleaseNotes GetReleaseNotes(string earlierBuild, string laterBuild);
         IEnumerable<string> GetStates();
     }
 }

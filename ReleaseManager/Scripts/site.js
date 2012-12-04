@@ -57,6 +57,9 @@
         $('#previousReleaseName').html(previousBuild);
         $('#currentReleaseName').html(currentBuild);
 
+        var hrefValue = 'Release/WorkItems?previousRelease={0}&currentRelease={1}';
+        $('#csvLink').attr('href', hrefValue.format(previousBuild, currentBuild));
+
         $.ajax(
             {
                 type: 'POST',
@@ -119,4 +122,14 @@
     $(document).on('change', '#StateSelector', highlightExceptionRows);
     $(document).on('change', '#dateSelector', getBuildsForDate);
     $(document).on('submit', 'form', getWorkItems);
+    
+    String.prototype.format = function () {
+        var args = arguments;
+        return this.replace(/{(\d+)}/g, function (match, number) {
+            return typeof args[number] != 'undefined'
+              ? args[number]
+              : match
+            ;
+        });
+    };
 })(document);

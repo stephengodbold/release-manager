@@ -28,6 +28,17 @@
                                                                           Text = state,
                                                                           Value = state
                                                                       }))
+    @Html.ActionLink("Download CSV", 
+                        "WorkItems", 
+                        new 
+                        {
+                            previousRelease = Model.PreviousRelease,
+                            currentRelease = Model.CurrentRelease
+                        },
+                        new
+                        {
+                            id = "csvLink"
+                        })
 </div>
 <div id="buildSelection" class="highlighted @(string.IsNullOrWhiteSpace(Model.PreviousRelease) ? string.Empty : "hidden"  )" >
     <form>
