@@ -74,11 +74,6 @@ namespace ReleaseManager
             }
 
             container.Register(Classes.FromThisAssembly()
-                                   .BasedOn<ICsvFormatter>()
-                                   .LifestylePerWebRequest()
-                                   .WithServiceAllInterfaces());
-
-            container.Register(Classes.FromThisAssembly()
                                    .BasedOn<IEnvironmentService>()
                                    .LifestylePerWebRequest()
                                    .WithServiceAllInterfaces());

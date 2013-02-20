@@ -138,7 +138,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Common\CsvResult.cs" />
     <Compile Include="Common\DateTimeExtensions.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReleaseController.cs" />
@@ -161,7 +160,6 @@
     <Compile Include="Services\ConfigurationService.cs" />
     <Compile Include="Services\EnvironmentService.cs" />
     <Compile Include="Common\WindsorControllerFactory.cs" />
-    <Compile Include="Services\ICsvFormatter.cs" />
     <Compile Include="Services\WorkItemService.cs" />
   </ItemGroup>
   <ItemGroup>

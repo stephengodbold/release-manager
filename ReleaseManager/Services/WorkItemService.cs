@@ -11,19 +11,16 @@ namespace ReleaseManager.Services
         private readonly IBuildWorkItemQuery buildWorkItemQuery;
         private readonly IBuildQuery buildQuery;
         private readonly IServerConfigurationQuery serverConfigurationQuery;
-        private readonly ICsvFormatter csvFormatter;
 
         public WorkItemService(
             IBuildWorkItemQuery buildWorkItemQuery,
             IBuildQuery buildQuery,
-            IServerConfigurationQuery serverConfigurationQuery,
-            ICsvFormatter csvFormatter
+            IServerConfigurationQuery serverConfigurationQuery
             )
         {
             this.buildWorkItemQuery = buildWorkItemQuery;
             this.buildQuery = buildQuery;
             this.serverConfigurationQuery = serverConfigurationQuery;
-            this.csvFormatter = csvFormatter;
         }
 
         public ReleaseNotes GetReleaseNotes(
@@ -55,7 +52,6 @@ namespace ReleaseManager.Services
             var releaseNotes = new ReleaseNotes
                                    {
                                        Items = workItems,
-                                       CsvItems = csvFormatter.EncodeAsCsv(workItems),
                                        PreviousRelease = earlierBuild,
                                        CurrentRelease = laterBuild,
                                        States = GetStates(),
@@ -113,7 +109,7 @@ namespace ReleaseManager.Services
                                            Id = "5",
                                            Release = "Release 3",
                                            State = "Active"
-                                       },
+                                       }
                                }
                        };
         }
