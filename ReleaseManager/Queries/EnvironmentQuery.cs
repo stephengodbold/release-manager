@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
 using System.Net;
-using System.Linq;
-using Microsoft.VisualBasic.FileIO;
 using Environment = ReleaseManager.Models.Environment;
 
 namespace ReleaseManager.Queries
@@ -15,34 +16,43 @@ namespace ReleaseManager.Queries
             var requestPath = new Uri(rootUri, "version.csv");
             var client = new WebClient();
             var environment = new Environment { Name = rootUri.Host };
-            Stream contentStream;
+            var tempFilePath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
 
             try
             {
-                contentStream = client.OpenRead(requestPath);
-            } catch (WebException)
-            {
-                return environment;
-            }
+                client.DownloadFile(requestPath, tempFilePath);
+                var sessionState = InitialSessionState.CreateDefault();
 
-            using (var parser = new TextFieldParser(contentStream))
-            {
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(",");
-                parser.CommentTokens = new[] {"#"};
-
-                while (!parser.EndOfData)
+                using (var shell = PowerShell.Create(sessionState))
                 {
-                    var fields = parser.ReadFields();
+                    var parameters = new Dictionary<string, object>
+                                         {
+                                             {"Path", tempFilePath},
+                                             {"Delimiter", ','}
+                                         };
+                    var command = shell.AddCommand("Import-Csv").AddParameters(parameters);
+                    var results = command.Invoke();
 
-                    if (fields.Count() != 3) continue;
-
-                    environment.LastReleaseDate = fields[0];
-                    environment.CurrentBuild = fields[1];
-                    environment.PreviousBuild = fields[2];
+                    foreach (dynamic result in results)
+                    {
+                        environment.LastReleaseDate = result.ReleaseDate;
+                        environment.PreviousBuild = result.PreviousVersion;
+                        environment.CurrentBuild = result.CurrentVersion;
+                    }
                 }
 
                 return environment;
+            } 
+            catch (WebException)
+            {
+                return environment;
+            }
+            finally
+            {
+                if (File.Exists(tempFilePath))
+                {
+                    File.Delete(tempFilePath);
+                }
             }
         }
     }
