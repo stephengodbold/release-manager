@@ -30,6 +30,12 @@ function Get-PreviousVersion {
 $versionTextPath = Join-Path $rootPath 'version.csv'
 $previousVersion = Get-PreviousVersion $versionTextPath
 
+if ($versionText -eq $previousVersion) 
+{ 
+    Write-Warning "Deploying the same version, version file will not be updated"
+    return
+}
+
 if (-not(Test-Path $versionTextPath)) {
     New-Item $versionTextPath -ItemType File
 }
