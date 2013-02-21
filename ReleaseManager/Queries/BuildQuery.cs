@@ -42,8 +42,8 @@ namespace ReleaseManager.Queries
                                Name = buildName,
                                Definition = buildDetail.BuildDefinition.Name,
                                Date = buildDetail.FinishTime,
-                               EarliestChangesetId = changes.Min(c => c.ChangesetId),
-                               LatestChangsetId = changes.Max(c => c.ChangesetId),
+                               EarliestChangesetId = changes.Any() ? changes.Min(c => c.ChangesetId) : 0,
+                               LatestChangsetId = changes.Any() ? changes.Max(c => c.ChangesetId) : 0,
                                BranchRoot = branchRoot,
                                BranchCreatedDate = branchDate,
                                BranchRootVersion = branchVersion

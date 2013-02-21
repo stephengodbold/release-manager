@@ -62,5 +62,17 @@ namespace ReleaseManager.Controllers
                 Encoding.UTF8
             );
         }
+
+        public CsvResult ReleaseNotes(string previousRelease, string currentRelease)
+        {
+            var releaseNotes = workItemService.GetReleaseNotes(previousRelease, currentRelease);
+
+            return new CsvResult
+                       {
+                           Name = "ReleaseNotes.csv",
+                           Content = releaseNotes.CsvItems,
+                           ContentEncoding = Encoding.UTF8
+                       };
+        }
     }
 }

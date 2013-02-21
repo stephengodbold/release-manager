@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ReleaseManager.Common;
 using ReleaseManager.Models;
 using ReleaseManager.Queries;
 
@@ -11,16 +12,19 @@ namespace ReleaseManager.Services
         private readonly IBuildWorkItemQuery buildWorkItemQuery;
         private readonly IBuildQuery buildQuery;
         private readonly IServerConfigurationQuery serverConfigurationQuery;
+        private readonly IWorkItemFormatter<string> workItemFormatter;
 
         public WorkItemService(
             IBuildWorkItemQuery buildWorkItemQuery,
             IBuildQuery buildQuery,
-            IServerConfigurationQuery serverConfigurationQuery
+            IServerConfigurationQuery serverConfigurationQuery,
+            IWorkItemFormatter<string> workItemFormatter
             )
         {
             this.buildWorkItemQuery = buildWorkItemQuery;
             this.buildQuery = buildQuery;
             this.serverConfigurationQuery = serverConfigurationQuery;
+            this.workItemFormatter = workItemFormatter;
         }
 
         public ReleaseNotes GetReleaseNotes(
@@ -55,7 +59,8 @@ namespace ReleaseManager.Services
                                        PreviousRelease = earlierBuild,
                                        CurrentRelease = laterBuild,
                                        States = GetStates(),
-                                       Title = "Release Notes"
+                                       Title = "Release Notes",
+                                       CsvItems = workItemFormatter.Format(workItems)
                                    };
 
             return releaseNotes;
