@@ -117,7 +117,10 @@ namespace ReleaseManager.Queries
                                       {
                                           Id = wi.Id.ToString(CultureInfo.InvariantCulture),
                                           Description = wi.Title,
-                                          State = wi.State
+                                          State = wi.State,
+                                          Release = wi.Fields.Contains("StudyGlobal.TargetRelease") ? 
+                                            wi.Fields["StudyGlobal.TargetRelease"].Value.ToString() : 
+                                            string.Empty
                                       });
                 }
 

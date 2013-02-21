@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Management.Automation;
 using ReleaseManager.Models;
 
 namespace ReleaseManager.Common

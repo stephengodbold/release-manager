@@ -64,6 +64,7 @@
             <th>ID</th>
             <th>Description</th>
             <th>State</th> 
+            <th>Release</th>
         </tr>
     </thead>
     <tbody id="workitemList">
@@ -74,6 +75,7 @@
                     <td>@workItem.Id</td>
                     <td>@workItem.Description</td>
                     <td>@workItem.State</td>
+                    <td>@workItem.Release</td>
                 </tr>
             }
         }
@@ -88,6 +90,7 @@
             <td>{{Id}}</td> 
             <td>{{Description}}</td> 
             <td>{{State}}</td>
+            <td>{{Release}}</td>
         </tr>
     {{/each}}
 </script>

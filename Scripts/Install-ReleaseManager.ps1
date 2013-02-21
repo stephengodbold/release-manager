@@ -25,7 +25,7 @@ $environments = @{
                     PhysicalPath = 'C:\inetpub\ReleaseManager';
                     SiteName = 'ReleaseManager';
                     IPAddress = '*';
-                    Port = 8010;
+                    Port = 80;
                     HostHeader = 'releasemanager.studygroup.com';
                 };
             }
