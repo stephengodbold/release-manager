@@ -5,6 +5,7 @@ namespace ReleaseManager.Models
     public class WorkItem
     {
         private const string WorkItemStringFormat = "{0},{1},{2},{3}";
+        public static string StringFormat { get { return "Id, Description,State,Release"; } }
 
         public string Id { get; set; }
         public string Description { get; set; }
@@ -17,8 +18,6 @@ namespace ReleaseManager.Models
             if (ReferenceEquals(this, obj)) return true;
             return obj.GetType() == GetType() && Equals((WorkItem) obj);
         }
-
-        public static string StringFormat { get { return "Id, Description,State,Release"; } }
 
         public override string ToString()
         {
