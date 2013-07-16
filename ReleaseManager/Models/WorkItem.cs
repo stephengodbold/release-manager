@@ -1,4 +1,6 @@
-﻿namespace ReleaseManager.Models
+﻿using System;
+
+namespace ReleaseManager.Models
 {
     public class WorkItem
     {
@@ -25,12 +27,7 @@
 
         protected bool Equals(WorkItem other)
         {
-            return string.Equals(Id, other.Id);
-        }
-
-        public override int GetHashCode()
-        {
-            return (Id != null ? Id.GetHashCode() : 0);
+            return string.Equals(Id, other.Id, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
