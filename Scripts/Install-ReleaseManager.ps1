@@ -19,14 +19,14 @@ $environments = @{
                     SiteName = 'ReleaseManager';
                     IPAddress = '*';
                     Port = 80;
-                    HostHeader = 'local.releasemanager.com';
+                    HostHeader = 'releasemanager.local';
                 };
                 Prod = @{
                     PhysicalPath = 'C:\inetpub\ReleaseManager';
                     SiteName = 'ReleaseManager';
                     IPAddress = '*';
                     Port = 80;
-                    HostHeader = 'releasemanager.studygroup.com';
+                    HostHeader = 'releasemanager.com';
                 };
             }
 
@@ -170,7 +170,7 @@ function Set-LocalRedirection {
     
 
     if ($hostsContent -contains $redirection) {
-        return        
+        return
     }
 
     $hostsContent += $redirection
@@ -191,7 +191,7 @@ if (-not (Test-Elevation)) {
     Write-Error 'This script must be run in an elevated session'
 }
 
-$buildRoot = '\\AUSYDITDSVR0013\Builds2\Release Manager CI\'
+$buildRoot = '\\BUILDROOT\'
 $sourcePathRoot = Join-Path $buildRoot $build 
 $sourcePath = Join-Path $sourcePathRoot '_PublishedWebsites\ReleaseManager'
 $environmentParamaters = Get-Environment $environment 
