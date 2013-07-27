@@ -21,8 +21,8 @@ namespace ReleaseManager.API.Tests.Controllers
                 var environmentQuery = Substitute.For<IEnvironmentSettingsQuery>();
                 environmentQuery.Execute().ReturnsForAnyArgs(environments);
                     
-                var controller = new EnvironmentController(environmentQuery);
-                var response = controller.List();
+                var controller = new EnvironmentsController(environmentQuery);
+                var response = controller.Get();
                 
                 Assert.IsNotNull(response);
                 Assert.IsNotNull(response.Data);
@@ -37,8 +37,8 @@ namespace ReleaseManager.API.Tests.Controllers
                 var environmentQuery = Substitute.For<IEnvironmentSettingsQuery>();
                 environmentQuery.Execute().ReturnsForAnyArgs(environments);
 
-                var controller = new EnvironmentController(environmentQuery);
-                var response = controller.List();
+                var controller = new EnvironmentsController(environmentQuery);
+                var response = controller.Get();
 
                 var deserialisedResult = Json.Decode(response.Data.ToString());
 

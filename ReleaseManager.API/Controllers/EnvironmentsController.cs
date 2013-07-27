@@ -5,16 +5,16 @@ using ReleaseManager.API.Queries;
 
 namespace ReleaseManager.API.Controllers
 {
-    public class EnvironmentController : ApiController
+    public class EnvironmentsController : ApiController, IEnvironmentController
     {
         private readonly IEnvironmentSettingsQuery query;
 
-        public EnvironmentController(IEnvironmentSettingsQuery query)
+        public EnvironmentsController(IEnvironmentSettingsQuery query)
         {
             this.query = query;
         }
 
-        public JsonResult List()
+        public JsonResult Get()
         {
             var environments = query.Execute();
 
@@ -23,5 +23,10 @@ namespace ReleaseManager.API.Controllers
                     Data = JsonConvert.SerializeObject(environments, Formatting.Indented)
                 };
         }
+    }
+
+    public interface IEnvironmentController
+    {
+        JsonResult Get();
     }
 }
