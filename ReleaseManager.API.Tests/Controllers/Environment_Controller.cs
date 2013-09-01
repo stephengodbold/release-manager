@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.Tracing;
+using System.Threading.Tasks;
 using System.Web.Helpers;
+using Castle.MicroKernel.ComponentActivator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using ReleaseManager.API.Controllers;

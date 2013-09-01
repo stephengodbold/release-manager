@@ -27,18 +27,19 @@ namespace ReleaseManager.API.Tests
             FilterConfig.RegisterApiGlobalFilters(config);
             ContainerConfig.RegisterTypes(config);
 
-            try
-            {
-                server = new HttpSelfHostServer(config);
-                server.OpenAsync().ContinueWith(t =>
-                {
-                    Trace.WriteLineIf(t.IsFaulted, t.Exception.ToString());
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.Write(ex.ToString());
-            }
+            server = new HttpSelfHostServer(config);
+
+            server.OpenAsync().ContinueWith(
+                    t =>
+                    {
+                        if (!t.IsFaulted) return;
+
+                        foreach (var exception in t.Exception.InnerExceptions)
+                        {
+                            Trace.WriteLine(exception.ToString());
+                        }
+                    }
+                ).Wait();
         }
 
         [TestCleanup]

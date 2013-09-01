@@ -15,7 +15,7 @@ namespace ReleaseManager.API.Tests.Demo_Mode
             var request = WebRequest.Create(BaseUri + "/api/environments");
             request.Headers.Add("x-api-mode", "demo");
             var responseHeaders = request.GetResponse().Headers;
-
+                
             Assert.IsTrue(responseHeaders.AllKeys.Contains("x-api-mode"));
             Assert.AreEqual("demo", responseHeaders.Get("x-api-mode"));
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Web.Http;
 using ReleaseManager.API.Common;
 using ReleaseManager.API.Queries;
@@ -25,12 +26,10 @@ namespace ReleaseManager.API.Controllers
             return environments;
         }
 
-        //public IDictionary<string, string> GetDemo()
-        //{
-
-
-        //    return new Dictionary<string, string> {{"Demo", "Demo"}};
-        //}
+        public IDictionary<string, string> GetDemo()
+        {
+            return new Dictionary<string, string> { { "Demo", "Demo" } };
+        }
 
         public Environment Get(string uri)
         {
