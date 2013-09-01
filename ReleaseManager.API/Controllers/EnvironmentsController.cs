@@ -1,32 +1,49 @@
-﻿using System.Web.Http;
-using System.Web.Mvc;
-using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Http;
+using ReleaseManager.API.Common;
 using ReleaseManager.API.Queries;
+using Environment = ReleaseManager.API.Models.Environment;
 
 namespace ReleaseManager.API.Controllers
 {
+    [DemoAction]
     public class EnvironmentsController : ApiController, IEnvironmentController
     {
-        private readonly IEnvironmentSettingsQuery query;
+        private readonly IEnvironmentSettingsQuery environmentsQuery;
+        private readonly IEnvironmentQuery environmentQuery;
 
-        public EnvironmentsController(IEnvironmentSettingsQuery query)
+        public EnvironmentsController(IEnvironmentSettingsQuery environmentsQuery, IEnvironmentQuery environmentQuery)
         {
-            this.query = query;
+            this.environmentsQuery = environmentsQuery;
+            this.environmentQuery = environmentQuery;
         }
 
-        public JsonResult Get()
+        public IDictionary<string, string> Get()
         {
-            var environments = query.Execute();
+            var environments = environmentsQuery.Execute();
+            return environments;
+        }
 
-            return new JsonResult
-                {
-                    Data = JsonConvert.SerializeObject(environments, Formatting.Indented)
-                };
+        //public IDictionary<string, string> GetDemo()
+        //{
+
+
+        //    return new Dictionary<string, string> {{"Demo", "Demo"}};
+        //}
+
+        public Environment Get(string uri)
+        {
+            var environmentUri = new Uri(uri);
+            var environment = environmentQuery.Execute(environmentUri);
+
+            return environment;
         }
     }
 
     public interface IEnvironmentController
     {
-        JsonResult Get();
+        IDictionary<string, string> Get();
+        Environment Get(string uri);
     }
 }

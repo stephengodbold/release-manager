@@ -18,31 +18,31 @@ namespace ReleaseManager.API.Tests.Controllers
             {
                 var environments = new Dictionary<string, string> {{"a", "b"}};
 
-                var environmentQuery = Substitute.For<IEnvironmentSettingsQuery>();
-                environmentQuery.Execute().ReturnsForAnyArgs(environments);
-                    
-                var controller = new EnvironmentsController(environmentQuery);
+                var environmentsQuery = Substitute.For<IEnvironmentSettingsQuery>();
+                environmentsQuery.Execute().ReturnsForAnyArgs(environments);
+
+                var environmentQuery = Substitute.For<IEnvironmentQuery>();
+                
+                var controller = new EnvironmentsController(environmentsQuery, environmentQuery);
                 var response = controller.Get();
                 
                 Assert.IsNotNull(response);
-                Assert.IsNotNull(response.Data);
-                Assert.IsFalse(response.Data.ToString().Equals("null"));
             }
 
             [TestMethod]
-            public void Returns_A_Json_Response_With_Environments()
+            public void Returns_A_Response_With_Environments()
             {
                 var environments = new Dictionary<string, string> { { "EnvironmentX", "http://url.com" } };
 
-                var environmentQuery = Substitute.For<IEnvironmentSettingsQuery>();
-                environmentQuery.Execute().ReturnsForAnyArgs(environments);
+                var environmentsQuery = Substitute.For<IEnvironmentSettingsQuery>();
+                environmentsQuery.Execute().ReturnsForAnyArgs(environments);
 
-                var controller = new EnvironmentsController(environmentQuery);
+                var environmentQuery = Substitute.For<IEnvironmentQuery>();
+
+                var controller = new EnvironmentsController(environmentsQuery, environmentQuery);
                 var response = controller.Get();
 
-                var deserialisedResult = Json.Decode(response.Data.ToString());
-
-                Assert.IsNotNull(deserialisedResult.EnvironmentX);
+                Assert.IsNotNull(response["EnvironmentX"]);
             }
         }
     }

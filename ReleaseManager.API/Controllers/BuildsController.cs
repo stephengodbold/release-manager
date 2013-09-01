@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Mvc;
 
 namespace ReleaseManager.API.Controllers
 {
-    public class BuildController : ApiController
+    public class BuildsController : ApiController
     {
         //list builds
         public ActionResult Get()
@@ -21,6 +16,5 @@ namespace ReleaseManager.API.Controllers
         {
             return new JsonResult();
         }
-
     }
 }
