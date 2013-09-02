@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.ServiceModel;
-using System.Web.Http;
 using System.Web.Http.SelfHost;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ReleaseManager.API.App_Start;
@@ -16,25 +14,21 @@ namespace ReleaseManager.API.Tests
         [TestInitialize]
         public void Initialise()
         {
-            BaseUri = new Uri("http://localhost:8181");
-            var config = new HttpSelfHostConfiguration(BaseUri)
-            {
-                IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always,
-                HostNameComparisonMode = HostNameComparisonMode.Exact
-            };
+            BaseUri = new Uri("http://localhost/Temporary_Listen_Addresses/" + Guid.NewGuid());
+            var config = new HttpSelfHostConfiguration(BaseUri);
 
             WebApiConfig.Register(config);
-            FilterConfig.RegisterApiGlobalFilters(config);
+            FilterConfig.RegisterGlobalFilters(config);
             ContainerConfig.RegisterTypes(config);
 
             server = new HttpSelfHostServer(config);
 
             server.OpenAsync().ContinueWith(
-                    t =>
+                    request =>
                     {
-                        if (!t.IsFaulted) return;
+                        if (!request.IsFaulted) return;
 
-                        foreach (var exception in t.Exception.InnerExceptions)
+                        foreach (var exception in request.Exception.InnerExceptions)
                         {
                             Trace.WriteLine(exception.ToString());
                         }

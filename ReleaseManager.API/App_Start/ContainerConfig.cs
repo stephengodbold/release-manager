@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using Autofac;
 using Autofac.Integration.WebApi;
+using ReleaseManager.API.Common;
 
 namespace ReleaseManager.API.App_Start
 {
@@ -24,6 +26,7 @@ namespace ReleaseManager.API.App_Start
                 .InstancePerApiRequest();
 
             config.DependencyResolver = new AutofacWebApiDependencyResolver(builder.Build());
+            config.Services.Replace(typeof(IHttpActionSelector), new DemoActionSelector());
         }
     }
 }

@@ -18,7 +18,7 @@ namespace ReleaseManager.API.Common
 
             if (apiMode.Equals("demo", StringComparison.InvariantCultureIgnoreCase))
             {
-                targetActionName = targetActionName + "demo";
+                targetActionName = targetActionName + "Demo";
             }
 
             var targetAction = typeInfo.GetMethod(targetActionName);

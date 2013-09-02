@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
+﻿using System.Linq;
 using System.Web.Http.Filters;
 
 namespace ReleaseManager.API.Common
@@ -11,10 +9,11 @@ namespace ReleaseManager.API.Common
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
             var headerValue = "default";
+            var headers = actionExecutedContext.Request.Headers;
 
-            if (actionExecutedContext.Request.Headers.Contains("x-api-mode"))
+            if (headers.Contains("x-api-mode"))
             {
-                headerValue = actionExecutedContext.Request.Headers.GetValues("x-api-mode").First();
+                headerValue = headers.First(h => h.Key.Equals("x-api-mode")).Value.First();
             }
 
             actionExecutedContext.Response.Headers.Add("x-api-mode", headerValue);

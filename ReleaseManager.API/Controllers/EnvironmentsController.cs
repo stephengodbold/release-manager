@@ -8,7 +8,6 @@ using Environment = ReleaseManager.API.Models.Environment;
 
 namespace ReleaseManager.API.Controllers
 {
-    [DemoAction]
     public class EnvironmentsController : ApiController, IEnvironmentController
     {
         private readonly IEnvironmentSettingsQuery environmentsQuery;
@@ -26,10 +25,10 @@ namespace ReleaseManager.API.Controllers
             return environments;
         }
 
-        public IDictionary<string, string> GetDemo()
-        {
-            return new Dictionary<string, string> { { "Demo", "Demo" } };
-        }
+        //public IDictionary<string, string> GetDemo()
+        //{
+        //    return new Dictionary<string, string> { { "Demo", "Demo" } };
+        //}
 
         public Environment Get(string uri)
         {
