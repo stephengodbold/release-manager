@@ -162,6 +162,7 @@
     <Compile Include="Common\CsvResult.cs" />
     <Compile Include="Common\DateTimeExtensions.cs" />
     <Compile Include="Common\DemoActionFilter.cs" />
+    <Compile Include="Common\HttpRequestExtensions.cs" />
     <Compile Include="Common\WorkItemCsvFormatter.cs" />
     <Compile Include="Controllers\BuildsController.cs" />
     <Compile Include="Controllers\EnvironmentsController.cs" />

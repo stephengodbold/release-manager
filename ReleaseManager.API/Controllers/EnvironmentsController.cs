@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Autofac.Features.Indexed;
 using ReleaseManager.API.App_Start;
+using ReleaseManager.API.Common;
 using ReleaseManager.API.Queries;
 using ReleaseManager.API.Services;
 using Environment = ReleaseManager.API.Models.Environment;
@@ -11,21 +12,21 @@ namespace ReleaseManager.API.Controllers
 {
     public class EnvironmentsController : ApiController, IEnvironmentController
     {
-        private readonly IEnvironmentService environmentService;
+        private readonly IIndex<ApiMode, IEnvironmentService> environmentService;
         private readonly IEnvironmentQuery environmentQuery;
 
         public EnvironmentsController(
             IIndex<ApiMode, IEnvironmentService> environmentService, 
             IEnvironmentQuery environmentQuery)
         {
-            var apiMode = ApiMode.Demo;
-            this.environmentService = environmentService[apiMode];
+            this.environmentService = environmentService;
             this.environmentQuery = environmentQuery;
         }
 
         public IEnumerable<Environment> Get()
         {
-            var environments = environmentService.GetEnvironments();
+            var apiMode = ControllerContext.Request.GetApiMode();
+            var environments = environmentService[apiMode].GetEnvironments();
             return environments;
         }
 
