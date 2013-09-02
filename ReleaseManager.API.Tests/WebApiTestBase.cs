@@ -14,7 +14,7 @@ namespace ReleaseManager.API.Tests
         [TestInitialize]
         public void Initialise()
         {
-            BaseUri = new Uri("http://localhost/Temporary_Listen_Addresses/" + Guid.NewGuid());
+            BaseUri = new Uri("http://localhost/Temporary_Listen_Addresses/");
             var config = new HttpSelfHostConfiguration(BaseUri);
 
             WebApiConfig.Register(config);

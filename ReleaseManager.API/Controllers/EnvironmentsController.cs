@@ -1,34 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Web.Http;
-using ReleaseManager.API.Common;
+using Autofac.Features.Indexed;
+using ReleaseManager.API.App_Start;
 using ReleaseManager.API.Queries;
+using ReleaseManager.API.Services;
 using Environment = ReleaseManager.API.Models.Environment;
 
 namespace ReleaseManager.API.Controllers
 {
     public class EnvironmentsController : ApiController, IEnvironmentController
     {
-        private readonly IEnvironmentSettingsQuery environmentsQuery;
+        private readonly IEnvironmentService environmentService;
         private readonly IEnvironmentQuery environmentQuery;
 
-        public EnvironmentsController(IEnvironmentSettingsQuery environmentsQuery, IEnvironmentQuery environmentQuery)
+        public EnvironmentsController(
+            IIndex<ApiMode, IEnvironmentService> environmentService, 
+            IEnvironmentQuery environmentQuery)
         {
-            this.environmentsQuery = environmentsQuery;
+            var apiMode = ApiMode.Demo;
+            this.environmentService = environmentService[apiMode];
             this.environmentQuery = environmentQuery;
         }
 
-        public IDictionary<string, string> Get()
+        public IEnumerable<Environment> Get()
         {
-            var environments = environmentsQuery.Execute();
+            var environments = environmentService.GetEnvironments();
             return environments;
         }
-
-        //public IDictionary<string, string> GetDemo()
-        //{
-        //    return new Dictionary<string, string> { { "Demo", "Demo" } };
-        //}
 
         public Environment Get(string uri)
         {
@@ -41,7 +40,7 @@ namespace ReleaseManager.API.Controllers
 
     public interface IEnvironmentController
     {
-        IDictionary<string, string> Get();
+        IEnumerable<Environment> Get();
         Environment Get(string uri);
     }
 }

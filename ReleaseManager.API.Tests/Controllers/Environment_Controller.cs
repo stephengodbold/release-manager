@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Tracing;
-using System.Threading.Tasks;
-using System.Web.Helpers;
-using Castle.MicroKernel.ComponentActivator;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Web.Http.Controllers;
+using Autofac.Features.Indexed;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using ReleaseManager.API.App_Start;
 using ReleaseManager.API.Controllers;
 using ReleaseManager.API.Queries;
+using ReleaseManager.API.Services;
+using Environment = ReleaseManager.API.Models.Environment;
 
 namespace ReleaseManager.API.Tests.Controllers
 {
@@ -21,14 +22,21 @@ namespace ReleaseManager.API.Tests.Controllers
             [TestMethod]
             public void Returns_A_Valid_Response()
             {
-                var environments = new Dictionary<string, string> {{"a", "b"}};
-
-                var environmentsQuery = Substitute.For<IEnvironmentSettingsQuery>();
-                environmentsQuery.Execute().ReturnsForAnyArgs(environments);
-
-                var environmentQuery = Substitute.For<IEnvironmentQuery>();
+                var environmentsQuerySelector = Substitute.For<IIndex<ApiMode, IEnvironmentService>>();
+                var environmentsQuery = Substitute.For<IEnvironmentService>();
+                environmentsQuery.GetEnvironments().ReturnsForAnyArgs(new[] {new Environment()});
+                environmentsQuerySelector[ApiMode.Demo].Returns(environmentsQuery);
                 
-                var controller = new EnvironmentsController(environmentsQuery, environmentQuery);
+                var environmentQuery = Substitute.For<IEnvironmentQuery>();
+                var controller = new EnvironmentsController(environmentsQuerySelector, environmentQuery)
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = new HttpRequestMessage()
+                    }
+                };
+
+                controller.ControllerContext.Request.Properties.Add("x-api-mode", ApiMode.Demo);
                 var response = controller.Get();
                 
                 Assert.IsNotNull(response);
@@ -37,17 +45,24 @@ namespace ReleaseManager.API.Tests.Controllers
             [TestMethod]
             public void Returns_A_Response_With_Environments()
             {
-                var environments = new Dictionary<string, string> { { "EnvironmentX", "http://url.com" } };
-
-                var environmentsQuery = Substitute.For<IEnvironmentSettingsQuery>();
-                environmentsQuery.Execute().ReturnsForAnyArgs(environments);
+                var environmentsQuerySelector = Substitute.For<IIndex<ApiMode, IEnvironmentService>>();
+                var environmentsQuery = Substitute.For<IEnvironmentService>();
+                environmentsQuery.GetEnvironments().ReturnsForAnyArgs(new[] { new Environment() });
+                environmentsQuerySelector[ApiMode.Demo].ReturnsForAnyArgs(environmentsQuery);
 
                 var environmentQuery = Substitute.For<IEnvironmentQuery>();
+                var controller = new EnvironmentsController(environmentsQuerySelector, environmentQuery)
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = new HttpRequestMessage()
+                    }
+                };
 
-                var controller = new EnvironmentsController(environmentsQuery, environmentQuery);
+                controller.ControllerContext.Request.Properties.Add("x-api-mode", ApiMode.Demo);
+
                 var response = controller.Get();
-
-                Assert.IsNotNull(response["EnvironmentX"]);
+                Assert.AreEqual(1, response.Count());
             }
         }
     }

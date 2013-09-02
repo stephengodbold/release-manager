@@ -32,7 +32,7 @@ namespace ReleaseManager.API.Services
         IEnumerable<Environment> GetEnvironments();
     }
 
-    public class StubEnvironmentService : IEnvironmentService
+    public class EnvironmentServiceStub : IEnvironmentService
     {
         public IEnumerable<Environment> GetEnvironments()
         {

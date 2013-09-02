@@ -164,7 +164,6 @@
     <Compile Include="Common\DemoActionFilter.cs" />
     <Compile Include="Common\WorkItemCsvFormatter.cs" />
     <Compile Include="Controllers\BuildsController.cs" />
-    <Compile Include="Common\DemoActionSelector.cs" />
     <Compile Include="Controllers\EnvironmentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
