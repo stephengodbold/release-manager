@@ -1,9 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Web.Http.Controllers;
+﻿using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using ReleaseManager.API.App_Start;
 
 namespace ReleaseManager.API.Common
 {
