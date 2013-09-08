@@ -8,6 +8,7 @@ using NSubstitute;
 using ReleaseManager.API.App_Start;
 using ReleaseManager.API.Controllers;
 using ReleaseManager.API.Services;
+using Shouldly;
 using Environment = ReleaseManager.API.Models.Environment;
 
 namespace ReleaseManager.API.Tests.Controllers
@@ -35,7 +36,7 @@ namespace ReleaseManager.API.Tests.Controllers
                 controller.ControllerContext.Request.Properties.Add("x-api-mode", ApiMode.Demo);
                 var response = controller.Get();
                 
-                Assert.IsNotNull(response);
+                response.ShouldNotBeSameAs(null);
             }
 
             [TestMethod]
@@ -57,7 +58,7 @@ namespace ReleaseManager.API.Tests.Controllers
                 controller.ControllerContext.Request.Properties.Add("x-api-mode", ApiMode.Demo);
 
                 var response = controller.Get();
-                Assert.AreEqual(1, response.Count());
+               response.Count().ShouldBe(1);
             }
         }
 
@@ -118,7 +119,7 @@ namespace ReleaseManager.API.Tests.Controllers
                     thrown = true;
                 }
 
-                Assert.IsTrue(thrown, "No uri format exception was thrown");
+                thrown.ShouldBe(true);
             }
 
             [TestMethod]
@@ -150,7 +151,7 @@ namespace ReleaseManager.API.Tests.Controllers
                     thrown = true;
                 }
 
-                Assert.IsTrue(thrown, "No uri format exception was thrown");
+                thrown.ShouldBe(true);
             }
         }
     }
