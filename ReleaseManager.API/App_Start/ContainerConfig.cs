@@ -43,6 +43,9 @@ namespace ReleaseManager.API.App_Start
                 .As<IEnvironmentService>()
                 .InstancePerApiRequest();
 
+            builder.RegisterType<ConfigurationService>()
+                .As<IConfigurationService>()
+                .InstancePerApiRequest();
 
         }
     }

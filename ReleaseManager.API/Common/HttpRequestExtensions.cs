@@ -26,14 +26,14 @@ namespace ReleaseManager.API.Common
         private static ApiMode ExtractApiModeHeader(HttpHeaders headers)
         {
             if (headers == null) throw new ArgumentNullException("headers");
-            var apiMode = ApiMode.Demo;
+            var apiMode = ApiMode.Production;
 
             if (!headers.Contains(ApiModeKey)) return apiMode;
 
             var headerValue = headers.First(h => h.Key.Equals(ApiModeKey)).Value.First();
-            if (!headerValue.Equals("demo", StringComparison.InvariantCultureIgnoreCase))
+            if (headerValue.Equals("demo", StringComparison.InvariantCultureIgnoreCase))
             {
-                apiMode = ApiMode.Production;
+                apiMode = ApiMode.Demo;
             }
 
             return apiMode;
