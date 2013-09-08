@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 
 namespace ReleaseManager.API.Tests.Demo_Mode
 {
@@ -16,8 +17,8 @@ namespace ReleaseManager.API.Tests.Demo_Mode
             request.Headers.Add("x-api-mode", "demo");
             var responseHeaders = request.GetResponse().Headers;
                 
-            Assert.IsTrue(responseHeaders.AllKeys.Contains("x-api-mode"));
-            Assert.IsTrue(responseHeaders.Get("x-api-mode").Equals("demo", StringComparison.InvariantCultureIgnoreCase));
+            responseHeaders.AllKeys.ShouldContain("x-api-mode");
+            responseHeaders.Get("x-api-mode").ShouldBe("demo", Case.Insensitive);
         }
 
         [TestMethod, TestCategory("Integration")]
@@ -26,8 +27,8 @@ namespace ReleaseManager.API.Tests.Demo_Mode
             var request = WebRequest.Create(BaseUri + "/api/environments");
             var responseHeaders = request.GetResponse().Headers;
 
-            Assert.IsTrue(responseHeaders.AllKeys.Contains("x-api-mode"));
-            Assert.IsTrue(responseHeaders.Get("x-api-mode").Equals("demo", StringComparison.InvariantCultureIgnoreCase));
+            responseHeaders.AllKeys.ShouldContain("x-api-mode");
+            responseHeaders.Get("x-api-mode").ShouldBe("demo", Case.Insensitive);
         }
     }
 }
