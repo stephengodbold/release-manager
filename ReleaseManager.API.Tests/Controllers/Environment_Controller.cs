@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http.Controllers;
@@ -8,7 +7,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using ReleaseManager.API.App_Start;
 using ReleaseManager.API.Controllers;
-using ReleaseManager.API.Queries;
 using ReleaseManager.API.Services;
 using Environment = ReleaseManager.API.Models.Environment;
 
@@ -115,7 +113,7 @@ namespace ReleaseManager.API.Tests.Controllers
                 {
                     controller.Get("Not a valid url");
                 }
-                catch (UriFormatException ex)
+                catch (UriFormatException)
                 {
                     thrown = true;
                 }
@@ -147,7 +145,7 @@ namespace ReleaseManager.API.Tests.Controllers
                 {
                     controller.Get("~/test/test");
                 }
-                catch (UriFormatException ex)
+                catch (UriFormatException)
                 {
                     thrown = true;
                 }
