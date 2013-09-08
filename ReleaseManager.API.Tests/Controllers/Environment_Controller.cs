@@ -23,12 +23,9 @@ namespace ReleaseManager.API.Tests.Controllers
             public void Returns_A_Valid_Response()
             {
                 var environmentsQuerySelector = Substitute.For<IIndex<ApiMode, IEnvironmentService>>();
-                var environmentsQuery = Substitute.For<IEnvironmentService>();
-                environmentsQuery.GetEnvironments().ReturnsForAnyArgs(new[] {new Environment()});
-                environmentsQuerySelector[ApiMode.Demo].Returns(environmentsQuery);
+                environmentsQuerySelector[ApiMode.Demo].Returns(new EnvironmentServiceStub());
                 
-                var environmentQuery = Substitute.For<IEnvironmentQuery>();
-                var controller = new EnvironmentsController(environmentsQuerySelector, environmentQuery)
+                var controller = new EnvironmentsController(environmentsQuerySelector)
                 {
                     ControllerContext = new HttpControllerContext
                     {
@@ -47,11 +44,10 @@ namespace ReleaseManager.API.Tests.Controllers
             {
                 var environmentsQuerySelector = Substitute.For<IIndex<ApiMode, IEnvironmentService>>();
                 var environmentsQuery = Substitute.For<IEnvironmentService>();
-                environmentsQuery.GetEnvironments().ReturnsForAnyArgs(new[] { new Environment() });
+                environmentsQuery.List().ReturnsForAnyArgs(new[] { new Environment() });
                 environmentsQuerySelector[ApiMode.Demo].ReturnsForAnyArgs(environmentsQuery);
 
-                var environmentQuery = Substitute.For<IEnvironmentQuery>();
-                var controller = new EnvironmentsController(environmentsQuerySelector, environmentQuery)
+                var controller = new EnvironmentsController(environmentsQuerySelector)
                 {
                     ControllerContext = new HttpControllerContext
                     {

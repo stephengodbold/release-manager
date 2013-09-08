@@ -18,23 +18,29 @@ namespace ReleaseManager.API.Services
             configurationService = configuration;
         }
 
-        public IEnumerable<Environment> GetEnvironments()
+        public IEnumerable<Environment> List()
         {
             var environments = configurationService.GetEnvironments();
             return environments == null ? 
                 new Environment[] {} : 
                 environments.Select(env => environmentQuery.Execute(new Uri(env.Value)));
         }
+
+        public Environment Get(Uri environmentUri)
+        {
+            return environmentQuery.Execute(environmentUri);
+        }
     }
 
     public interface IEnvironmentService
     {
-        IEnumerable<Environment> GetEnvironments();
+        IEnumerable<Environment> List();
+        Environment Get(Uri environmentUri);
     }
 
     public class EnvironmentServiceStub : IEnvironmentService
     {
-        public IEnumerable<Environment> GetEnvironments()
+        public IEnumerable<Environment> List()
         {
             return new[]
                        {
@@ -53,6 +59,17 @@ namespace ReleaseManager.API.Services
                                    PreviousBuild = string.Empty
                                },
                        };
+        }
+
+        public Environment Get(Uri environmentUri)
+        {
+            return new Environment
+            {
+                Name = "Demo Environment",
+                CurrentBuild = "Demo_Build20130604.03",
+                PreviousBuild = "Demo_Build20130525.04",
+                LastReleaseDate = "4th June 2013"
+            };
         }
     }
 }

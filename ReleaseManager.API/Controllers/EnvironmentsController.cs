@@ -12,30 +12,37 @@ namespace ReleaseManager.API.Controllers
 {
     public class EnvironmentsController : ApiController, IEnvironmentController
     {
-        private readonly IIndex<ApiMode, IEnvironmentService> environmentService;
-        private readonly IEnvironmentQuery environmentQuery;
+        private readonly IIndex<ApiMode, IEnvironmentService> environmentServices;
+        private IEnvironmentService environmentService;
 
         public EnvironmentsController(
-            IIndex<ApiMode, IEnvironmentService> environmentService, 
-            IEnvironmentQuery environmentQuery)
+            IIndex<ApiMode, IEnvironmentService> environmentServices)
         {
-            this.environmentService = environmentService;
-            this.environmentQuery = environmentQuery;
+            this.environmentServices = environmentServices;
         }
 
         public IEnumerable<Environment> Get()
         {
-            var apiMode = ControllerContext.Request.GetApiMode();
-            var environments = environmentService[apiMode].GetEnvironments();
+            ResolveEnvironmentService();
+
+            var environments = environmentService.List();
             return environments;
         }
 
         public Environment Get(string uri)
         {
+            ResolveEnvironmentService();
+
             var environmentUri = new Uri(uri);
-            var environment = environmentQuery.Execute(environmentUri);
+            var environment = environmentService.Get(environmentUri);
 
             return environment;
+        }
+
+        private void ResolveEnvironmentService()
+        {
+            var apiMode = ControllerContext.Request.GetApiMode();
+            environmentService = environmentServices[apiMode];
         }
     }
 
