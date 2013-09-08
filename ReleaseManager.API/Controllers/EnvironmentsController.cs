@@ -4,7 +4,6 @@ using System.Web.Http;
 using Autofac.Features.Indexed;
 using ReleaseManager.API.App_Start;
 using ReleaseManager.API.Common;
-using ReleaseManager.API.Queries;
 using ReleaseManager.API.Services;
 using Environment = ReleaseManager.API.Models.Environment;
 
