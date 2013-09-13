@@ -14,4 +14,12 @@ namespace ReleaseManager.API.Models
         public string BranchRootVersion { get; set; }
         public DateTime BranchCreatedDate { get; set; }
     }
+
+    public class Build
+    {
+        public string Name { get; set; }
+        public DateTime Date { get; set; }
+        public string Definition { get; set; }
+        public string Result { get; set; }
+    }
 }

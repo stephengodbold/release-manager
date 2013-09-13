@@ -1,20 +1,38 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Http;
 using System.Web.Mvc;
+using Autofac.Features.Indexed;
+using ReleaseManager.API.App_Start;
+using ReleaseManager.API.Common;
+using ReleaseManager.API.Models;
+using ReleaseManager.API.Services;
 
 namespace ReleaseManager.API.Controllers
 {
     public class BuildsController : ApiController
     {
+        private readonly IIndex<ApiMode, IBuildService> buildServiceByMode;
+        private IBuildService buildService;
+
         //list builds
-        public ActionResult Get()
+        public IEnumerable<Build> Get(DateTime buildDate)
         {
-            return new JsonResult();
+            ResolveBuildService();
+            return buildService.GetBuilds(buildDate);
         }
 
         //get the details for a build
         public ActionResult Get(string identifier)
         {
+            ResolveBuildService();
             return new JsonResult();
+        }
+
+        private void ResolveBuildService()
+        {
+            var apiMode = ControllerContext.Request.GetApiMode();
+            buildService = buildServiceByMode[apiMode];
         }
     }
 }

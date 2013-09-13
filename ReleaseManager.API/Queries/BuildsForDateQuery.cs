@@ -4,12 +4,13 @@ using System.Linq;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Client;
 using ReleaseManager.API.Common;
+using ReleaseManager.API.Models;
 
 namespace ReleaseManager.API.Queries
 {
     public class BuildsForDateQuery : IBuildsForDateQuery
     {
-        public IEnumerable<string> Execute(DateTime buildDate, Uri serverUri, string projectName)
+        public IEnumerable<Build> Execute(DateTime buildDate, Uri serverUri, string projectName)
         {
             using (var collection = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(serverUri))
             {
@@ -20,13 +21,20 @@ namespace ReleaseManager.API.Queries
                 searchSpec.QueryDeletedOption = QueryDeletedOption.IncludeDeleted;
                 var results = buildService.QueryBuilds(searchSpec);
 
-                return results.Builds.Select(build => build.BuildNumber);
+                return results.Builds.Select(build =>
+                    new Build
+                        {
+                            Name = build.BuildNumber,
+                            Date = build.StartTime,
+                            Definition = build.BuildDefinition.Name,
+                            Result = build.Status.ToString()
+                        });
             }
         }
     }
 
     public interface IBuildsForDateQuery
     {
-        IEnumerable<string> Execute(DateTime buildDate, Uri serverUri, string projectName);
+        IEnumerable<Build> Execute(DateTime buildDate, Uri serverUri, string projectName);
     }
 }
