@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Web.Http;
 using Autofac.Features.Indexed;
 using ReleaseManager.API.App_Start;
@@ -32,16 +33,24 @@ namespace ReleaseManager.API.Controllers
         {
             ResolveEnvironmentService();
 
-            var environmentUri = new Uri(uri);
-            var environment = environmentService.Get(environmentUri);
-
-            return environment;
+            try
+            {
+                var environmentUri = new Uri(uri, UriKind.Absolute);
+                var environment = environmentService.Get(environmentUri);
+                return environment;
+            }
+            catch (UriFormatException)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
         }
-
+        
         private void ResolveEnvironmentService()
         {
             var apiMode = ControllerContext.Request.GetApiMode();
             environmentService = environmentServices[apiMode];
+
+            
         }
     }
 

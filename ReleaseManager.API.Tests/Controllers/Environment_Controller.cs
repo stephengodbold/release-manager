@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Web.Http;
 using System.Web.Http.Controllers;
 using Autofac.Features.Indexed;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -108,18 +110,16 @@ namespace ReleaseManager.API.Tests.Controllers
 
                 controller.ControllerContext.Request.Properties.Add("x-api-mode", ApiMode.Demo);
 
-                var thrown = false;
-
                 try
                 {
                     controller.Get("Not a valid url");
                 }
-                catch (UriFormatException)
+                catch (HttpResponseException ex)
                 {
-                    thrown = true;
+                    ex.Response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
                 }
 
-                thrown.ShouldBe(true);
+                
             }
 
             [TestMethod]
@@ -140,18 +140,14 @@ namespace ReleaseManager.API.Tests.Controllers
 
                 controller.ControllerContext.Request.Properties.Add("x-api-mode", ApiMode.Demo);
 
-                var thrown = false;
-
                 try
                 {
-                    controller.Get("~/test/test");
+                    controller.Get("~/builds/1");
                 }
-                catch (UriFormatException)
+                catch (HttpResponseException ex)
                 {
-                    thrown = true;
+                    ex.Response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
                 }
-
-                thrown.ShouldBe(true);
             }
         }
     }

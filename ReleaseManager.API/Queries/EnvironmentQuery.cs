@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Management.Automation;
 using System.Net;
 using Environment = ReleaseManager.API.Models.Environment;
 
@@ -21,23 +20,23 @@ namespace ReleaseManager.API.Queries
             {
                 client.DownloadFile(requestPath, tempFilePath);
 
-                using (var shell = PowerShell.Create())
-                {
-                    var parameters = new Dictionary<string, object>
-                                         {
-                                             {"Path", tempFilePath},
-                                             {"Delimiter", ','}
-                                         };
+                //using (var shell = PowerShell.Create())
+                //{
+                //    var parameters = new Dictionary<string, object>
+                //                         {
+                //                             {"Path", tempFilePath},
+                //                             {"Delimiter", ','}
+                //                         };
 
-                    var command = shell.AddCommand("Import-Csv").AddParameters(parameters);
-                    var results = command.Invoke();
+                //    var command = shell.AddCommand("Import-Csv").AddParameters(parameters);
+                //    var results = command.Invoke();
 
-                    var resultsFirst = results[0];
+                //    var resultsFirst = results[0];
 
-                    environment.LastReleaseDate = resultsFirst.Properties["ReleaseDate"].Value.ToString();
-                    environment.PreviousBuild = resultsFirst.Properties["PreviousVersion"].Value.ToString();
-                    environment.CurrentBuild = resultsFirst.Properties["CurrentVersion"].Value.ToString();
-                }
+                //    environment.LastReleaseDate = resultsFirst.Properties["ReleaseDate"].Value.ToString();
+                //    environment.PreviousBuild = resultsFirst.Properties["PreviousVersion"].Value.ToString();
+                //    environment.CurrentBuild = resultsFirst.Properties["CurrentVersion"].Value.ToString();
+                //}
 
                 return environment;
             } 
