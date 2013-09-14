@@ -2,6 +2,7 @@
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
+using ReleaseManager.API.Common;
 using ReleaseManager.API.Services;
 
 namespace ReleaseManager.API.App_Start
@@ -33,6 +34,16 @@ namespace ReleaseManager.API.App_Start
 
         private static void RegisterServices(ContainerBuilder builder)
         {
+            builder.RegisterType<WorkItemService>()
+                .Keyed<IWorkItemService>(ApiMode.Production)
+                .As<IWorkItemService>()
+                .InstancePerApiRequest();
+
+            builder.RegisterType<WorkItemServiceStub>()
+                .Keyed<IWorkItemService>(ApiMode.Demo)
+                .As<IWorkItemService>()
+                .InstancePerApiRequest();
+
             builder.RegisterType<BuildService>()
                 .Keyed<IBuildService>(ApiMode.Production)
                 .As<IBuildService>()
@@ -51,6 +62,10 @@ namespace ReleaseManager.API.App_Start
             builder.RegisterType<EnvironmentServiceStub>()
                 .Keyed<IEnvironmentService>(ApiMode.Demo)
                 .As<IEnvironmentService>()
+                .InstancePerApiRequest();
+
+            builder.RegisterType<WorkItemCsvFormatter>()
+                .As<IWorkItemFormatter<string>>()
                 .InstancePerApiRequest();
 
             builder.RegisterType<ConfigurationService>()

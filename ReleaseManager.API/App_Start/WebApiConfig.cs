@@ -11,6 +11,11 @@ namespace ReleaseManager.API
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Routes.MapHttpRoute(
+                name: "NotesApi",
+                routeTemplate: "api/{controller}/{earlierBuild}/{laterBuild}"
+            );
         }
     }
 }
