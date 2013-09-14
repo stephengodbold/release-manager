@@ -15,6 +15,17 @@ namespace ReleaseManager.API.Controllers
         private readonly IIndex<ApiMode, IBuildService> buildServiceByMode;
         private IBuildService buildService;
 
+        public BuildsController(IIndex<ApiMode, IBuildService> buildServiceByMode)
+        {
+            this.buildServiceByMode = buildServiceByMode;
+        }
+
+        public IEnumerable<Build> Get()
+        {
+            ResolveBuildService();
+            return buildService.GetBuilds(DateTime.Today);
+        }
+
         //list builds
         public IEnumerable<Build> Get(DateTime buildDate)
         {

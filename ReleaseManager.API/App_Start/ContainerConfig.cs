@@ -33,6 +33,16 @@ namespace ReleaseManager.API.App_Start
 
         private static void RegisterServices(ContainerBuilder builder)
         {
+            builder.RegisterType<BuildService>()
+                .Keyed<IBuildService>(ApiMode.Production)
+                .As<IBuildService>()
+                .InstancePerApiRequest();
+
+            builder.RegisterType<BuildServiceStub>()
+                .Keyed<IBuildService>(ApiMode.Demo)
+                .As<IBuildService>()
+                .InstancePerApiRequest();
+
             builder.RegisterType<EnvironmentService>()
                 .Keyed<IEnvironmentService>(ApiMode.Production)
                 .As<IEnvironmentService>()
