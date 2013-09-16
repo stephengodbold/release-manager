@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Web.Http;
 using System.Web.Mvc;
 using Autofac.Features.Indexed;
@@ -29,15 +30,28 @@ namespace ReleaseManager.API.Controllers
         //list builds
         public IEnumerable<Build> Get(DateTime buildDate)
         {
+            if (buildDate > DateTime.Today)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
             ResolveBuildService();
             return buildService.GetBuilds(buildDate);
         }
 
         //get the details for a build
-        public ActionResult Get(string identifier)
+        public Build Get(string identifier)
         {
             ResolveBuildService();
-            return new JsonResult();
+
+            var build = buildService.GetBuild(identifier);
+
+            if (build == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            return build;
         }
 
         private void ResolveBuildService()
