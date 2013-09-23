@@ -21,8 +21,10 @@ namespace ReleaseManager.API.Tests.Controllers
         [TestClass]
         public class When_Asked_For_Environments
         {
+            private const string TestUriString = "http://test-env/test";
+
             [TestMethod]
-            public void Returns_A_Valid_Response()
+            public void Returns_A_Valid_Demo_Response()
             {
                 var environmentsQuerySelector = Substitute.For<IIndex<ApiMode, IEnvironmentService>>();
                 environmentsQuerySelector[ApiMode.Demo].Returns(new EnvironmentServiceStub());
@@ -42,35 +44,7 @@ namespace ReleaseManager.API.Tests.Controllers
             }
 
             [TestMethod]
-            public void Returns_A_Response_With_Environments()
-            {
-                var environmentsQuerySelector = Substitute.For<IIndex<ApiMode, IEnvironmentService>>();
-                var environmentsQuery = Substitute.For<IEnvironmentService>();
-                environmentsQuery.List().ReturnsForAnyArgs(new[] { new Environment() });
-                environmentsQuerySelector[ApiMode.Demo].ReturnsForAnyArgs(environmentsQuery);
-
-                var controller = new EnvironmentsController(environmentsQuerySelector)
-                {
-                    ControllerContext = new HttpControllerContext
-                    {
-                        Request = new HttpRequestMessage()
-                    }
-                };
-
-                controller.ControllerContext.Request.Properties.Add("x-api-mode", ApiMode.Demo);
-
-                var response = controller.Get();
-               response.Count().ShouldBe(1);
-            }
-        }
-
-        [TestClass]
-        public class When_Asked_For_Specific_Environment
-        {
-            private const string TestUriString = "http://test-env/test";
-
-            [TestMethod]
-            public void With_A_Valid_Url_Returns_An_Environment()
+            public void Returns_An_Environment_For_A_Valid_Url()
             {
                 var environmentsQuerySelector = Substitute.For<IIndex<ApiMode, IEnvironmentService>>();
                 var environmentsQuery = Substitute.For<IEnvironmentService>();
@@ -93,7 +67,7 @@ namespace ReleaseManager.API.Tests.Controllers
             }
 
             [TestMethod]
-            public void With_An_Invalid_Url_Throws_Uri_Format_Exception()
+            public void Returns_404_For_An_Invalid_Url()
             {
                 var environmentsQuerySelector = Substitute.For<IIndex<ApiMode, IEnvironmentService>>();
                 var environmentsQuery = Substitute.For<IEnvironmentService>();
@@ -123,7 +97,7 @@ namespace ReleaseManager.API.Tests.Controllers
             }
 
             [TestMethod]
-            public void With_A_Relative_Url_Throws_Uri_Format_Exception()
+            public void Returns_404_For_A_Relative_Url()
             {
                 var environmentsQuerySelector = Substitute.For<IIndex<ApiMode, IEnvironmentService>>();
                 var environmentsQuery = Substitute.For<IEnvironmentService>();

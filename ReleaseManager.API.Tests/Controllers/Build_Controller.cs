@@ -20,7 +20,7 @@ namespace ReleaseManager.API.Tests.Controllers
         public class When_Asked_For_Builds
         {
             [TestMethod]
-            public void Returns_A_Valid_Response()
+            public void Returns_A_Valid_Demo_Response()
             {
                 var buildServiceByMode = Substitute.For<IIndex<ApiMode, IBuildService>>();
                 buildServiceByMode[ApiMode.Demo].Returns(new BuildServiceStub());
