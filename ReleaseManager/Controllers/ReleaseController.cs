@@ -10,20 +10,15 @@ namespace ReleaseManager.Controllers
 {
     public class ReleaseController : Controller
     {
-        private readonly IWorkItemService workItemService;
-
-        public ReleaseController(IWorkItemService workItemService)
-        {
-            this.workItemService = workItemService;
-        }
-
+        
+        
 
         public ActionResult Index(string currentRelease, string previousRelease)
         {
             try
             {
-                var model = workItemService.GetReleaseNotes(previousRelease, currentRelease);
-                return View(model);
+                
+                return View();
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -49,12 +44,11 @@ namespace ReleaseManager.Controllers
         [HttpPost]
         public JsonResult WorkItems(string previousRelease, string currentRelease)
         {
-            var releaseNotes = workItemService.GetReleaseNotes(previousRelease, currentRelease);
+            
 
             return Json( 
                 new { 
-                    workitems = releaseNotes.Items,
-                    states = releaseNotes.States
+                    
                 },
                 "application/json",
                 Encoding.UTF8
@@ -63,12 +57,12 @@ namespace ReleaseManager.Controllers
 
         public CsvResult ReleaseNotes(string previousRelease, string currentRelease)
         {
-            var releaseNotes = workItemService.GetReleaseNotes(previousRelease, currentRelease);
+            
 
             return new CsvResult
                        {
                            Name = "ReleaseNotes.csv",
-                           Content = releaseNotes.CsvItems,
+                           
                            ContentEncoding = Encoding.UTF8
                        };
         }

@@ -7,7 +7,7 @@ namespace ReleaseManager.Services
     {
         public string GetRootUri()
         {
-            return @"http://localhost:8181";
+            return @"http://localhost:8181/api/";
         }
 
         public string GetMode()
