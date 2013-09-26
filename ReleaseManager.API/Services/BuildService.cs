@@ -26,6 +26,11 @@ namespace ReleaseManager.API.Services
                 new Uri(serverConfig["Server.TeamFoundation"]), 
                 serverConfig["Server.ProjectName"]).OrderBy(build => build);
         }
+
+        public Build GetBuild(string identifier)
+        {
+            return null;
+        }
     }
 
     public class BuildServiceStub : IBuildService
@@ -57,10 +62,22 @@ namespace ReleaseManager.API.Services
                     },
                 };
         }
+
+        public Build GetBuild(string identifier)
+        {
+            return new Build
+            {
+                Date = DateTime.Today.AddDays(-5),
+                Definition = "BuildDefinition",
+                Result = "Failed",
+                Name = "BuildDefinition_20130111.1"
+            };
+        }
     }
 
     public interface IBuildService
     {
         IEnumerable<Build> GetBuilds(DateTime buildDate);
+        Build GetBuild(string identifier);
     }
 }

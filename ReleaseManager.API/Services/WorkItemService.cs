@@ -73,50 +73,57 @@ namespace ReleaseManager.API.Services
         }
     }
 
-    public class StubWorkItemService : IWorkItemService
+    public class WorkItemServiceStub : IWorkItemService
     {
         public ReleaseNotes GetReleaseNotes(string earlierBuild, string laterBuild)
         {
+            var items = new[]
+            {
+                new WorkItem
+                {
+                    Description = "Work Item: Do some stuff",
+                    Id = "1",
+                    Release = "Release 1",
+                    State = "Resolved"
+                },
+                new WorkItem
+                {
+                    Description = "Work Item: Do some stuff",
+                    Id = "2",
+                    Release = "Release 1",
+                    State = "Resolved"
+                },
+                new WorkItem
+                {
+                    Description = "Work Item: Do some stuff",
+                    Id = "3",
+                    Release = "Release 1",
+                    State = "Testing"
+                },
+                new WorkItem
+                {
+                    Description = "Work Item: Do some stuff",
+                    Id = "4",
+                    Release = "Release 2",
+                    State = "Ready for Development"
+                },
+                new WorkItem
+                {
+                    Description = "Work Item: Do some stuff",
+                    Id = "5",
+                    Release = "Release 3",
+                    State = "Active"
+                }
+            };
+
             return new ReleaseNotes
                        {
-                           Items = new[]
-                               {
-                                   new WorkItem
-                                       {
-                                           Description = "Work Item: Do some stuff",
-                                           Id = "1",
-                                           Release = "Release 1",
-                                           State = "Resolved"
-                                       },
-                                   new WorkItem
-                                       {
-                                           Description = "Work Item: Do some stuff",
-                                           Id = "2",
-                                           Release = "Release 1",
-                                           State = "Resolved"
-                                       },
-                                   new WorkItem
-                                       {
-                                           Description = "Work Item: Do some stuff",
-                                           Id = "3",
-                                           Release = "Release 1",
-                                           State = "Testing"
-                                       },
-                                   new WorkItem
-                                       {
-                                           Description = "Work Item: Do some stuff",
-                                           Id = "4",
-                                           Release = "Release 2",
-                                           State = "Ready for Development"
-                                       },
-                                   new WorkItem
-                                       {
-                                           Description = "Work Item: Do some stuff",
-                                           Id = "5",
-                                           Release = "Release 3",
-                                           State = "Active"
-                                       }
-                               }
+                           PreviousRelease = "DemoBuild_20130401.1",
+                           CurrentRelease = "DemoBuild_20130402.2",
+                           Title = string.Format("Release Notes {0}", DateTime.Today.ToShortDateString()),
+                           CsvItems = new WorkItemCsvFormatter().Format(items),
+                           Items = items,
+                           States = GetStates()
                        };
         }
 

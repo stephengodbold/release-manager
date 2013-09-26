@@ -11,12 +11,10 @@ namespace ReleaseManager.Controllers
     public class ReleaseController : Controller
     {
         private readonly IWorkItemService workItemService;
-        private readonly IBuildService buildService;
 
-        public ReleaseController(IWorkItemService workItemService, IBuildService buildService)
+        public ReleaseController(IWorkItemService workItemService)
         {
             this.workItemService = workItemService;
-            this.buildService = buildService;
         }
 
 
@@ -45,7 +43,7 @@ namespace ReleaseManager.Controllers
         [HttpPost]
         public JsonResult Builds(DateTime date)
         {
-            return Json(buildService.GetBuilds(date));
+            return null;
         }
 
         [HttpPost]

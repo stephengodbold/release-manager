@@ -8,20 +8,21 @@ namespace ReleaseManager.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IEnvironmentService environmentService;
+        private readonly IConfigurationService configurationService;
 
-        public HomeController(IEnvironmentService environmentService)
+        public HomeController(IConfigurationService configurationService)
         {
-            this.environmentService = environmentService;
+            this.configurationService = configurationService;
         }
 
         public ActionResult Index()
         {
             IEnumerable<Environment> model;
 
+            var rootUri = configurationService.GetRootUri();
+
             try
             {
-                model = environmentService.GetEnvironments();
             } 
             catch (WebException)
             {

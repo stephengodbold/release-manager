@@ -16,7 +16,15 @@ namespace ReleaseManager
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ContainerConfig.RegisterTypes();
+        }
+    }
 
+    public static class ContainerConfig
+    {
+        public static void RegisterTypes()
+        {
+            
         }
     }
 }
