@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Web.Mvc;
 using ReleaseManager.Common;
@@ -10,30 +11,37 @@ namespace ReleaseManager.Controllers
 {
     public class ReleaseController : Controller
     {
-        
-        
+        private const string NotesResource = "notes";
+
+        private readonly IRestService _restService;
+
+        public ReleaseController(IRestService restService)
+        {
+            _restService = restService;
+        }
 
         public ActionResult Index(string currentRelease, string previousRelease)
         {
+            ReleaseNotes model;
+            
             try
             {
-                
-                return View();
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                var model = new ReleaseNotes
-                {
-                    Title = "Release Notes",
-                    CurrentRelease = currentRelease,
-                    PreviousRelease = previousRelease,
-                    States = new string[] { },
-                    Items = new Collection<WorkItem>()
-                };
+                var parameters = new Dictionary<string, string>
+                    {
+                        {"currentRelease", currentRelease},
+                        {"previousRelease", previousRelease}
+                    };
 
-                return View(model);
+                model = _restService.GetModel<ReleaseNotes>(NotesResource, parameters);
             }
+            catch (WebException)
+            {
+                model = new ReleaseNotes();
+            }
+
+            return View(model);
         }
+
 
         [HttpPost]
         public JsonResult Builds(DateTime date)
@@ -44,8 +52,6 @@ namespace ReleaseManager.Controllers
         [HttpPost]
         public JsonResult WorkItems(string previousRelease, string currentRelease)
         {
-            
-
             return Json( 
                 new { 
                     

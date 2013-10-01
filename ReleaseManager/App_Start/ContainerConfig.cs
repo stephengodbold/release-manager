@@ -19,7 +19,10 @@ namespace ReleaseManager.App_Start
                    .As<IConfigurationService>()
                    .InstancePerHttpRequest();
 
-
+            builder.RegisterType<RestService>()
+                   .As<IRestService>()
+                   .InstancePerHttpRequest();
+            
             builder.RegisterModule(new AutofacWebTypesModule());
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(builder.Build()));
