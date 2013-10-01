@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web.Mvc;
@@ -33,6 +34,7 @@ namespace ReleaseManager.Controllers
                     };
 
                 model = _restService.GetModel<ReleaseNotes>(NotesResource, parameters);
+                model.States = model.Items.Select(item => item.State).Distinct();
             }
             catch (WebException)
             {

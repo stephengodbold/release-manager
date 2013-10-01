@@ -19,7 +19,7 @@ namespace ReleaseManager.API.App_Start
         {
             var builder = new ContainerBuilder();
             var currentAssembly = Assembly.GetExecutingAssembly();
-            
+
             builder.RegisterApiControllers(currentAssembly);
 
             builder.RegisterAssemblyTypes(currentAssembly)

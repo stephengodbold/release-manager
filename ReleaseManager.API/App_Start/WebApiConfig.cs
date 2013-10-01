@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using ReleaseManager.API.Common;
 
 namespace ReleaseManager.API
 {
@@ -9,7 +10,7 @@ namespace ReleaseManager.API
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                defaults: new { controller = "Home", id = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
