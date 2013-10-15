@@ -12,7 +12,7 @@ namespace ReleaseManager.Controllers
 {
     public class ReleaseController : Controller
     {
-        private const string NotesResource = "notes";
+        private const string NotesResource = "/notes";
 
         private readonly IRestService _restService;
 
