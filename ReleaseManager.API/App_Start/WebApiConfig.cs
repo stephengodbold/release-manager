@@ -17,11 +17,6 @@ namespace ReleaseManager.API
                 name: "NotesApi",
                 routeTemplate: "api/{controller}/{earlierBuild}/{laterBuild}"
             );
-
-            config.Routes.MapHttpRoute(
-                name: "NotesApi",
-                routeTemplate: "api/{controller}/{earlierBuild}/{laterBuild}"
-            );
         }
     }
 }
