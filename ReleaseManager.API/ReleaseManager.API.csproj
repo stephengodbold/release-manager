@@ -169,10 +169,6 @@
     <Compile Include="Common\WorkItemCsvFormatter.cs" />
     <Compile Include="Controllers\BuildsController.cs" />
     <Compile Include="Controllers\EnvironmentsController.cs" />
-<<<<<<< HEAD
-=======
-    <Compile Include="Controllers\HomeController.cs" />
->>>>>>> c95527e5bdcad2ac94de132c1ef1acdfce80fa27
     <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
