@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -44,7 +45,6 @@ namespace ReleaseManager.Controllers
                     States = new string[0],
                     CurrentRelease = currentRelease,
                     PreviousRelease = previousRelease,
-                    CsvItems = string.Empty,
                     Items = new WorkItem[0],
                     Title = string.Empty
                 };
@@ -60,7 +60,6 @@ namespace ReleaseManager.Controllers
                     States = new string[0],
                     CurrentRelease = currentRelease,
                     PreviousRelease = previousRelease,
-                    CsvItems = string.Empty,
                     Items = new WorkItem[0],
                     Title = string.Empty
                 };
@@ -85,16 +84,11 @@ namespace ReleaseManager.Controllers
             );
         }
 
-        public CsvResult ReleaseNotes(string previousRelease, string currentRelease)
+        public ReleaseNotes ReleaseNotes(string previousRelease, string currentRelease)
         {
-            
+            Response.AddHeader("Content-Disposition", "attachment;filename=ReleaseNotes.csv");
 
-            return new CsvResult
-                       {
-                           Name = "ReleaseNotes.csv",
-                           
-                           ContentEncoding = Encoding.UTF8
-                       };
+            return GetDefaultModel("", "");
         }
     }
 }

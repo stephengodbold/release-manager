@@ -9,6 +9,5 @@ namespace ReleaseManager.Models
         public string PreviousRelease { get; set; }
         public IEnumerable<WorkItem> Items { get; set; }
         public IEnumerable<string> States { get; set; }
-        public string CsvItems { get; set; }
     }
 }

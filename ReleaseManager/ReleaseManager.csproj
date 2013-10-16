@@ -103,6 +103,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\v1.0\System.Management.Automation.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -141,10 +142,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\ContainerConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\FormatterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\WorkItemCsvFormatter.cs" />
     <Compile Include="Common\DateTimeExtensions.cs" />
-    <Compile Include="Common\CsvResult.cs" />
+    <Compile Include="Common\CsvFormatter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReleaseController.cs" />
     <Compile Include="Global.asax.cs">
