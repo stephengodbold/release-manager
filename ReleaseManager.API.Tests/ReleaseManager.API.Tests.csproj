@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Controllers\Build_Controller.cs" />
     <Compile Include="Controllers\Environment_Controller.cs" />
+    <Compile Include="Controllers\Notes_Controller.cs" />
     <Compile Include="Demo Mode\When_Asked_For_Demo_Environments.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApiTestBase.cs" />

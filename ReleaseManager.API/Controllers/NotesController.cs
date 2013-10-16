@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 using Autofac.Features.Indexed;
 using ReleaseManager.API.App_Start;
 using ReleaseManager.API.Common;
@@ -20,6 +22,12 @@ namespace ReleaseManager.API.Controllers
 
         public ReleaseNotes Get(string laterBuild, string earlierBuild = "")
         {
+            
+            if (string.IsNullOrWhiteSpace(earlierBuild) || string.IsNullOrWhiteSpace(laterBuild)) 
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest){ReasonPhrase = "Two builds must be specified to obtain release notes"});
+            }
+
             ResolveWorkItemService();
             return workItemService.GetReleaseNotes(earlierBuild, laterBuild);
         }

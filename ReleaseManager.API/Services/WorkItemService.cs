@@ -35,10 +35,6 @@ namespace ReleaseManager.API.Services
             string earlierBuild,
             string laterBuild)
         {
-            if (string.IsNullOrWhiteSpace(earlierBuild) || string.IsNullOrWhiteSpace(laterBuild)) {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest){ReasonPhrase = "Two builds must be specified to obtain release notes"});
-            }
-
             var servers = serverConfigurationQuery.Execute();
             var serverUri = new Uri(servers["Server.TeamFoundation"]);
             var projectName = servers["Server.ProjectName"];
