@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 using ReleaseManager.API.Common;
 using ReleaseManager.API.Models;
 using ReleaseManager.API.Queries;
@@ -32,11 +35,6 @@ namespace ReleaseManager.API.Services
             string earlierBuild,
             string laterBuild)
         {
-            if (string.IsNullOrWhiteSpace(earlierBuild))
-            {
-                throw new ArgumentOutOfRangeException("earlierBuild", earlierBuild, "Earlier build not set");
-            }
-
             var servers = serverConfigurationQuery.Execute();
             var serverUri = new Uri(servers["Server.TeamFoundation"]);
             var projectName = servers["Server.ProjectName"];

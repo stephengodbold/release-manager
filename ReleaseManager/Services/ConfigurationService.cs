@@ -1,42 +1,25 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using ReleaseManager.Queries;
 
 namespace ReleaseManager.Services
 {
     public class ConfigurationService : IConfigurationService
     {
-        private readonly IEnvironmentConfigurationQuery environmentQuery;
-        private readonly IServerConfigurationQuery serverQuery;
-
-        public ConfigurationService(IEnvironmentConfigurationQuery environmentQuery,
-            IServerConfigurationQuery serverQuery)
+        public string GetRootUri()
         {
-            this.environmentQuery = environmentQuery;
-            this.serverQuery = serverQuery;
+            return @"http://localhost:40666/api/";
         }
 
-        public IDictionary<string, string> GetEnvironments()
+        public string GetMode()
         {
-            var configurationValues = environmentQuery.Execute();
-
-            return configurationValues
-                .Where(config => Uri.IsWellFormedUriString(config.Value, UriKind.Absolute))
-                .ToDictionary(pair => pair.Key, pair => pair.Value);
-        }
-
-        public IDictionary<string, string> GetServers()
-        {
-            return serverQuery.Execute();
+            return "Demo";
         }
     }
 
     public interface IConfigurationService
     {
-        IDictionary<string, string> GetEnvironments();
-        IDictionary<string, string> GetServers();
+        string GetRootUri();
+        string GetMode();
     }
 
 }

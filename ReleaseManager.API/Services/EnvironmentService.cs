@@ -56,7 +56,7 @@ namespace ReleaseManager.API.Services
                                    CurrentBuild = "Build 2",
                                    LastReleaseDate = DateTime.Now.AddDays(-20).ToShortDateString(),
                                    Name = "Test",
-                                   PreviousBuild = string.Empty
+                                   PreviousBuild = "Build 1"
                                },
                        };
         }

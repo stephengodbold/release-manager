@@ -51,6 +51,12 @@
       <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.1.1\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc">
+      <HintPath>..\packages\Autofac.Mvc4.3.1.0\lib\net40\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -88,6 +94,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.2.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -130,9 +139,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\ContainerConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Common\WorkItemCsvFormatter.cs" />
     <Compile Include="Common\DateTimeExtensions.cs" />
     <Compile Include="Common\CsvResult.cs" />
@@ -146,17 +155,8 @@
     <Compile Include="Models\WorkItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\BuildDetail.cs" />
-    <Compile Include="Queries\BuildsForDateQuery.cs" />
-    <Compile Include="Queries\BuildWorkItemQuery.cs" />
-    <Compile Include="Queries\BuildQuery.cs" />
-    <Compile Include="Queries\ConfigurationQuery.cs" />
-    <Compile Include="Queries\EnvironmentQuery.cs" />
-    <Compile Include="Queries\ServerConfigurationQuery.cs" />
-    <Compile Include="Queries\WorkItemCategoryQuery.cs" />
-    <Compile Include="Services\BuildService.cs" />
     <Compile Include="Services\ConfigurationService.cs" />
-    <Compile Include="Services\EnvironmentService.cs" />
-    <Compile Include="Services\WorkItemService.cs" />
+    <Compile Include="Services\RestService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Readme\Elmah.txt" />

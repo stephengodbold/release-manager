@@ -1,27 +1,38 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Web.Mvc;
 using ReleaseManager.Models;
 using ReleaseManager.Services;
+using RestSharp;
 
 namespace ReleaseManager.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IEnvironmentService environmentService;
+        private readonly IConfigurationService _configurationService;
 
-        public HomeController(IEnvironmentService environmentService)
+        public HomeController(IConfigurationService configurationService)
         {
-            this.environmentService = environmentService;
+            _configurationService = configurationService;
         }
 
         public ActionResult Index()
         {
             IEnumerable<Environment> model;
 
+            var rootUri = _configurationService.GetRootUri();
+            var demoMode = _configurationService.GetMode();
+
             try
             {
-                model = environmentService.GetEnvironments();
+                var client = new RestClient(rootUri);
+                var request = new RestRequest("/environments", Method.GET);
+                request.AddHeader("x-api-mode", demoMode);
+
+                var response = client.Execute<Collection<Environment>>(request);
+
+                model = response.Data;
             } 
             catch (WebException)
             {
@@ -30,5 +41,6 @@ namespace ReleaseManager.Controllers
 
             return View(model);
         }
+
     }
 }
