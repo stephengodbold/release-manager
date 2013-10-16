@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
@@ -34,6 +35,28 @@ namespace ReleaseManager.API.Tests.Controllers
 
             var exception = Should.Throw<HttpResponseException>(() => controller.Get("testbuild"));
             exception.Response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        }
+
+        [TestMethod]
+        public void Returns_Items_For_Two_Builds_Specified()
+        {
+            var resolver = Substitute.For<IIndex<ApiMode, IWorkItemService>>();
+            resolver[ApiMode.Demo].ReturnsForAnyArgs(new WorkItemServiceStub());
+
+            var controller = new NotesController(resolver)
+            {
+                ControllerContext = new HttpControllerContext
+                {
+                    Request = new HttpRequestMessage()
+                }
+            };
+
+            controller.ControllerContext.Request.Properties.Add("x-api-mode", ApiMode.Demo);
+
+            var result = controller.Get("later build", "earlierBuild");
+
+            result.ShouldNotBe(null);
+            result.Items.Count().ShouldBeGreaterThan(0);
         }
     }
 }

@@ -1,13 +1,5 @@
-<<<<<<< HEAD
 ﻿<configuration>
     <configSections>
         <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
     </configSections>
 </configuration>
-=======
-﻿<configuration>
-    <configSections>
-        <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
-    </configSections>
-</configuration>
->>>>>>> c95527e5bdcad2ac94de132c1ef1acdfce80fa27
