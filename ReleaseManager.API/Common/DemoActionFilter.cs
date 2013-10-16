@@ -13,7 +13,11 @@ namespace ReleaseManager.API.Common
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
             var apiMode = actionExecutedContext.Request.GetApiMode();
-            actionExecutedContext.Response.Headers.Add("x-api-mode", apiMode.ToString());
+
+            if (actionExecutedContext.Response != null)
+            {
+                actionExecutedContext.Response.Headers.Add("x-api-mode", apiMode.ToString());
+            }
 
             base.OnActionExecuted(actionExecutedContext);
         }

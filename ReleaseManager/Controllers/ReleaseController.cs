@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using ReleaseManager.Common;
 using ReleaseManager.Models;
@@ -29,19 +30,36 @@ namespace ReleaseManager.Controllers
             {
                 var parameters = new Dictionary<string, string>
                     {
-                        {"currentRelease", currentRelease},
-                        {"previousRelease", previousRelease}
+                        {"earlierBuild", previousRelease},
+                        {"laterBuild", currentRelease}
                     };
 
                 model = _restService.GetModel<ReleaseNotes>(NotesResource, parameters);
                 model.States = model.Items.Select(item => item.State).Distinct();
             }
+            catch (HttpException)
+            {
+                model = SetDefaultModel(currentRelease, previousRelease);
+            }
             catch (WebException)
             {
-                model = new ReleaseNotes();
+                model = SetDefaultModel(currentRelease, previousRelease);
             }
 
             return View(model);
+        }
+
+        private ReleaseNotes SetDefaultModel(string currentRelease, string previousRelease)
+        {
+            return new ReleaseNotes
+                {
+                    States = new string[0],
+                    CurrentRelease = currentRelease,
+                    PreviousRelease = previousRelease,
+                    CsvItems = string.Empty,
+                    Items = new WorkItem[0],
+                    Title = string.Empty
+                };
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Web;
 using RestSharp;
 
 namespace ReleaseManager.Services
@@ -23,25 +24,34 @@ namespace ReleaseManager.Services
             var request = new RestRequest(resource, Method.GET);
             request.AddHeader("x-api-mode", demoMode);
 
-            AddRequestParameters(request, parameters);
+            AddRequestUrlParameters(request, parameters);
 
             var response = client.Execute<T>(request);
-            if ((response.ErrorException != null) || (!string.IsNullOrWhiteSpace(response.ErrorMessage)))
+            if ((response.ErrorException != null) || 
+                (!string.IsNullOrWhiteSpace(response.ErrorMessage)))
             {
                 throw new WebException(response.ErrorMessage, response.ErrorException);
+            }
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new HttpException((int) response.StatusCode, response.StatusDescription);
             }
 
             return response.Data;
         }
 
-        private void AddRequestParameters(RestRequest request, Dictionary<string, string> parameters)
+        private void AddRequestUrlParameters(RestRequest request, Dictionary<string, string> parameters)
         {
             if ((parameters == null) || (parameters.Count == 0))
                 return;
 
             foreach (var param in parameters)
             {
-                request.AddParameter(param.Key, param.Value);
+                if (!string.IsNullOrWhiteSpace(param.Value))
+                {
+                    request.AddParameter(param.Key, param.Value, ParameterType.UrlSegment);
+                }
             }
         }
     }

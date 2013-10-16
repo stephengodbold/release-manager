@@ -18,7 +18,7 @@ namespace ReleaseManager.API.Controllers
             this.workItemServiceByMode = workItemServiceByMode;
         }
 
-        public ReleaseNotes Get(string earlierBuild, string laterBuild)
+        public ReleaseNotes Get(string laterBuild, string earlierBuild = "")
         {
             ResolveWorkItemService();
             return workItemService.GetReleaseNotes(earlierBuild, laterBuild);
