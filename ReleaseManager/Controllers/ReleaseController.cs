@@ -39,17 +39,21 @@ namespace ReleaseManager.Controllers
             }
             catch (HttpException)
             {
-                model = SetDefaultModel(currentRelease, previousRelease);
-            }
-            catch (WebException)
-            {
-                model = SetDefaultModel(currentRelease, previousRelease);
+                model = new ReleaseNotes
+                {
+                    States = new string[0],
+                    CurrentRelease = currentRelease,
+                    PreviousRelease = previousRelease,
+                    CsvItems = string.Empty,
+                    Items = new WorkItem[0],
+                    Title = string.Empty
+                };
             }
 
             return View(model);
         }
 
-        private ReleaseNotes SetDefaultModel(string currentRelease, string previousRelease)
+        private ReleaseNotes GetDefaultModel(string currentRelease, string previousRelease)
         {
             return new ReleaseNotes
                 {

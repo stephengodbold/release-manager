@@ -27,7 +27,7 @@
                     @(string.IsNullOrWhiteSpace(environment.PreviousBuild) ? "None" : environment.PreviousBuild)
                 </td>
                 <td class="environment">@environment.LastReleaseDate</td>
-                <td class="environment">@Html.ActionLink("View Associated Work",
+                <td class="environment">@Html.ActionLink("Release Notes",
                                                             "Index",
                                                             "Release",
                                                             new{ 

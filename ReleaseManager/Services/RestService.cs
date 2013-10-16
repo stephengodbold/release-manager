@@ -28,14 +28,10 @@ namespace ReleaseManager.Services
 
             var response = client.Execute<T>(request);
             if ((response.ErrorException != null) || 
-                (!string.IsNullOrWhiteSpace(response.ErrorMessage)))
+                (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+                || (response.StatusCode != HttpStatusCode.OK))
             {
-                throw new WebException(response.ErrorMessage, response.ErrorException);
-            }
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new HttpException((int) response.StatusCode, response.StatusDescription);
+                throw new HttpException((int) response.StatusCode, response.ErrorMessage, response.ErrorException);
             }
 
             return response.Data;
