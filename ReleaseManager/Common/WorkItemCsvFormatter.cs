@@ -8,9 +8,10 @@ namespace ReleaseManager.Common
     {
         public string Format(IEnumerable<WorkItem> workItems)
         {
-            return workItems
-                .Aggregate(WorkItem.StringFormat, (current, next) =>
-                    current += string.Format("{0}{1}", System.Environment.NewLine, next.ToString()));
+            return string.Empty;
+            //workItems
+            //.Aggregate(WorkItem.StringFormat, (current, next) =>
+            //    current += string.Format("{0}{1}", System.Environment.NewLine, next.ToString()));
         }
     }
 
